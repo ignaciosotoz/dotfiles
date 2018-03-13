@@ -1,0 +1,16 @@
+[filter "lfs"]
+	clean = git-lfs clean %f
+	smudge = git-lfs smudge %f
+	required = true
+[user]
+	name = ignaciosotoz
+	email = ignacio.soto.z@gmail.com
+[push]
+	default = simple
+[core]
+	excludesfile = /Users/gncstzmr-wrkstt/.gitignore_global
+    pager = diff-so-fancy | less --tabs=4 -RFX
+[alias]
+        logbranch= log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'
+        
+.gitconfig

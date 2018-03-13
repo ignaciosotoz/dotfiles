@@ -1,0 +1,36 @@
+# osx 
+alias chrome="open -a Google\ Chrome"
+alias rstudio="open -a RStudio"
+alias safari="open -a Safari"
+alias iTunes="open -a iTunes"
+alias syspref="open -a System\ Preferences"
+alias railssrv="chrome http://localhost:3000"
+alias jupytersrv="chrome http://localhost:8888"
+alias ownnotes="cd ${HOME}/Documents/ownnotes"
+alias ideas="cd ${HOME}/Documents/gitideas"
+alias classes="cd ${HOME}/Documents/courses"
+alias cvitae="cd ${HOME}/Documents/personaldocs/CV"
+alias ds-latam="cd ${HOME}/Documents/ds-latam"
+alias books="cd ${HOME}/Documents/refs"
+alias vim="nvim"
+
+
+# Tmux aliases
+alias tmux-nw="tmux new-window"
+alias tmux-ns="tmux new-session"
+alias tmux-kw="tmux kill-window"
+alias tmux-ks="tmux kill-session"
+
+# Todolist alias
+alias todo="todolist"
+
+# the-fuck
+eval $(thefuck --alias)
+eval $(thefuck --alias FUCK)
+eval $(thefuck --alias fff)     # SFW
+
+
+# Gitignore
+
+function gitignore() { curl -L -s https://www.gitignore.io/api/$@ ;}
+

@@ -1,0 +1,249 @@
+set nocompatible
+set encoding=utf8
+filetype off
+
+if empty(glob('~/.config/nvim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+   \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin('~/.vim/plugged')
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
+Plug 'chrisbra/csv.vim'
+Plug 'junegunn/limelight.vim'
+Plug 'junegunn/goyo.vim'
+Plug 'airblade/vim-gitgutter'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'jiangmiao/auto-pairs'
+Plug 'vim-airline/vim-airline'
+
+Plug 'scrooloose/nerdtree'
+Plug 'sjl/gundo.vim'
+Plug 'tpope/vim-fugitive'
+Plug 'tmhedberg/SimpylFold'
+Plug 'tpope/vim-surround'
+Plug 'vim-scripts/indentpython.vim'
+Plug 'jalvesaq/Nvim-R'
+Plug 'edkolev/tmuxline.vim'
+Plug 'honza/vim-snippets'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'majutsushi/tagbar'
+Plug 'pangloss/vim-javascript'
+Plug 'w0rp/ale'
+Plug 'scrooloose/syntastic'
+Plug 'tpope/vim-rails'
+Plug 'vim-ruby/vim-ruby'
+Plug 'vim-scripts/Align'
+Plug 'ayu-theme/ayu-vim'
+Plug 'garbas/vim-snipmate'
+Plug 'Yggdroot/indentLine'
+Plug 'davidhalter/jedi-vim'
+Plug 'junegunn/seoul256.vim'
+Plug 'ervandew/supertab'
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', {'do' : ':UpdateRemotePlugins'}
+else
+  Plug 'Shougo/neocomplete.vim'
+endif
+Plug 'vim-scripts/vim-addon-mw-utils'
+Plug 'tomtom/tlib_vim'
+Plug 'JuliaEditorSupport/julia-vim'
+Plug 'vim-scripts/R-syntax-highlighting'
+Plug 'scrooloose/nerdcommenter'
+Plug 'jceb/vim-orgmode'
+Plug 'tpope/vim-speeddating'
+Plug 'arcticicestudio/nord-vim'
+Plug 'slim-template/vim-slim'
+Plug 'rafi/awesome-vim-colorschemes'
+Plug 'vim-scripts/Zenburn'
+Plug 'beigebrucewayne/skull-vim'
+Plug 'ryanoasis/vim-devicons'
+call plug#end()
+
+filetype plugin indent on
+filetype plugin on
+syntax on
+
+set foldmethod=indent
+set foldnestmax=10
+set nofoldenable
+set foldlevel=1
+set modifiable
+set wildmenu
+let maplocalleader = ","
+
+if (has('gui_running'))
+    colorscheme materialbox
+    set background:dark
+else
+	colorscheme nord
+    set background:dark
+endif
+let g:tmuxline_powerline_separators = 0
+
+"autocmd BufEnter * lcd %:p:h
+
+nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
+
+set number
+" set relativenumber
+set noswapfile 
+set tabstop=4
+set shiftwidth=4
+set expandtab
+
+" R assign keymap
+let R_assign = 2
+" R do not indent commented
+let R_indent_commented = 0
+" R open Object Browser on top of Console, 10 lines height
+let R_objbr_place = "console,top"
+let R_objbr_w=10
+let R_objbr_opendf =1
+set backspace=indent,eol,start
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+
+" Syntastic settings {{{
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+let g:syntastic_enable_r_lintr_checker = 1
+let g:syntastic_r_checkers = ['lintr']
+let g:syntastic_r_lintr_linters = "with_defaults(line_length_linter(120))"
+
+nmap <leader>sc :SyntasticCheck<CR>
+nmap <leader>st :SyntasticToggleMode<CR>
+
+" }}}
+
+" Airline settings {{{
+
+let g:airline_powerline_fonts = 0
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#fnamemod = ':t'
+
+" }}}
+let g:javascript_plugin_flow = 1
+" Indent lines
+" let g:indent_guides_enable_on_vim_startup = 1
+
+" This allows buffers to be hidden if you've modified a buffer.
+" This is almost a must if you wish to use buffers in this way.
+set hidden
+
+
+" Markdown settings {{{
+
+let g:vim_markdown_fenced_languages = ['ruby=rb', 'python=py', 'r=r', 'javascript=js', 'julia=jl', 'bash=sh']
+set conceallevel=2
+let g:vim_markdown_math = 1
+" }}}
+
+" To open a new empty buffer
+" This replaces :tabnew which I used to bind to this mapping
+nmap <leader>T :enew<cr>
+
+" Move to the next buffer
+nmap <leader>l :bnext<CR>
+
+" Move to the previous buffer
+nmap <leader>h :bprevious<CR>
+
+" Close the current buffer and move to the previous one
+" This replicates the idea of closing a tab
+nmap <leader>bq :bp <BAR> bd #<CR>
+
+" Show all open buffers and their status
+nmap <leader>bl :ls<CR>
+
+" indent
+let g:indentLine_setColor = 0
+let g:indentLine_char = '⋮'
+
+" auto close parentheses, brackets, and curly brackets
+let g:AutoPairsFlyMode = 1
+
+" Syntactic conif
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+let g:syntastic_javascript_checkers = ['jshint']
+
+set cursorline
+
+
+
+let g:vim_markdown_conceal = 0
+let g:tex_conceal = ""
+let g:vim_markdown_math = 1
+
+" Recognize julia files
+
+autocmd BufRead,BufNewFile *.jl :set filetype=julia
+
+
+" R icon for devicons
+let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols = {}
+let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['r'] = 'ℝ'
+
+
+
+
+let g:NERDTreeDirArrows=0
+let g:NERDTreeChDirMode=2
+nmap <leader>tb :TagbarToggle<CR>
+nmap <leader>nn :NERDTreeToggle<CR>
+let g:tagbar_type_r = {
+    \ 'ctagstype' : 'r',
+    \ 'kinds'     : [
+        \ 'f:Functions',
+        \ 'g:GlobalVariables',
+        \ 'v:FunctionVariables',
+    \ ]
+\ }
+
+
+
+" Show invisible characters
+nmap <leader>i :set list!<CR>
+:set listchars=tab:▒░,trail:▓,eol:•
+
+" set snips authorship
+let g:snips_author = "Ignacio Soto Zamorano"
+let g:snips_email = "ignacio[dot]soto[dot]z[at]gmail[dot]com"
+let g:snips_github = "https://github.com/yourname"
+
+" Vim + Tmux = <3
+set clipboard=unnamed
+let g:yankring_clipboard_monitor=0
+" Handle jedi-vim notification
+" let g:jedi#force_py_version = 3
+
+
+" Ale settings {{{
+let g:ale_emit_conflict_warnings = 0
+let g:ale_lint_delay = 600
+" }}}
+
+
+let g:deoplete#enable_at_startup = 1
+
+
+
+

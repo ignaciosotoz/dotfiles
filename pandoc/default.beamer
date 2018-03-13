@@ -1,0 +1,377 @@
+\documentclass[9pt, ignorenonframetext]{beamer}
+
+  % Extra packages
+  \usepackage{float}
+  \usepackage{makeidx}
+  \usepackage{graphicx}
+  \usepackage{booktabs}
+  \usepackage{amsmath}
+  \usepackage[spanish]{babel}
+  \usepackage[utf8]{inputenc}
+  \usepackage{tikz}
+  \usetikzlibrary{calc}
+  \usepackage{tikzscale}
+  \usepackage{pgflibraryarrows}
+  \usepackage{pgflibrarysnakes}
+  \usepackage{pgfplots}
+  \usepackage{icomma}
+  \usepackage{pgfplotstable}
+  \usepackage{tabularx}
+  \usepackage{xparse}
+  \usepackage{varwidth}
+  \usepackage{caption}
+  \usepackage{colortbl}
+  \usepackage{booktabs, multicol, multirow}
+  \usetikzlibrary{shapes,arrows,positioning,calc}
+  \usepackage{amssymb, amsmath, wasysym}
+  \usepackage[table]{xcolor}
+  \usepackage{pgfplotstable}
+% \usepackage{3dplot}
+\usepackage{pgfcalendar}
+\pgfplotsset{compat=newest}
+\usepgfplotslibrary{groupplots}
+\usetikzlibrary{
+  arrows,
+  positioning,
+  matrix,
+  calc,
+  decorations.pathreplacing,
+  decorations.pathmorphing,
+  decorations.markings,
+  decorations.text,
+  shapes,
+  backgrounds,
+  shadows,
+  trees,
+  fit,
+  snakes,
+  patterns,
+  mindmap,
+  intersections,
+  calendar,
+  plotmarks,
+  spy}
+
+
+
+%%    Define colors
+\definecolor{NormalText}{RGB}{25,25,25} % Text color: Black
+\definecolor{standardblue}{RGB}{11,103,197} % Blue Hue
+\definecolor{standardred}{RGB}{242, 96, 82} % Red Hue
+\definecolor{standardteal}{RGB}{0, 206, 102} % Teal Hue
+\definecolor{standardyellow}{RGB}{238,173,14} % Yellow Hue
+\definecolor{standardpurple}{RGB}{204,204,204} % Purple Hue
+\definecolor{backgroundC}{RGB}{221,221,221} % Background Gray
+\definecolor{grayBoxTit}{RGB}{118,118,118} % Title Gray
+\definecolor{grayBoxSec}{RGB}{173,173,173} % Section Gray
+
+% Assign colors
+\setbeamercolor{background canvas}{bg=backgroundC} % Background
+\setbeamercolor{normal text}{fg = NormalText} % Normal Text Color
+\setbeamercolor{frametitle}{fg = standardblue} % Title and Frame Title
+\setbeamercolor{title}{fg = standardblue} 
+\setbeamercolor{section in toc}{fg = standardblue} % Table of Contents
+\setbeamercolor{section in toc shaded}{fg = standardblue} 
+\setbeamercolor{item}{fg = standardblue} % Items, subitems and subsubitems
+\setbeamercolor{subitem}{fg = standardblue}
+\setbeamercolor{subsubitem}{fg = standardblue}
+\setbeamercolor{description item}{fg = standardblue} % Descriptions
+\setbeamercolor{caption}{fg = standardblue} % Figures and Tables
+\setbeamercolor{caption name}{fg = standardblue}
+
+%%    Font theme
+\usepackage{fontspec}
+\setsansfont[Mapping=tex-text]{FiraSans-Light} % sans serif
+\setmonofont[Mapping=tex-text]{FiraSans-Heavy}
+
+% Make Title Larger
+\makeatletter
+\newcommand\HUGE{\@setfontsize\Huge{38}{47}}
+\makeatother
+% Set Title
+\setbeamerfont{title}{size = \HUGE, family=\ttfamily}
+% Frame Title Spec
+\setbeamerfont{frametitle}{size = \Large, family=\ttfamily}
+% Items default
+\useinnertheme{rectangles}
+\setbeamertemplate{itemize items}[rectangles]
+\setbeamertemplate{itemize subitems}[triangles]
+\setbeamertemplate{itemize subsubitems}[circle]
+% Override navigation bar
+\setbeamertemplate{navigation symbols}{}
+% Title page. Left ragged
+\makeatletter
+\setbeamertemplate{title page}[default][left,colsep=-4bp,rounded=true,shadow=\beamer@themerounded@shadow]
+\makeatother
+\usepackage[colorlinks=true,
+            linkcolor=standardred,
+            urlcolor=standardred,
+            citecolor=standardred]{hyperref}
+
+%Sections begin with an empty slide. Set left ragged text
+\AtBeginSection[]{
+  \begin{frame}
+  \vfill
+    {\HUGE\bf\color{standardblue}{\thesection}}\par
+  \vspace{3mm}
+  {\color{standardblue}\hline}
+  \vspace{3mm}
+  {\Huge\color{standardblue}{\insertsection}}%
+  \vspace{3mm}
+  \vfill
+  \end{frame}
+}
+
+%% Options: Progress bar or Page Count (Default)
+%Progress
+\setbeamercolor{progress bar progress}{use=progress bar,bg=progress bar.fg}
+\defbeamertemplate{footline}{progress bar}{
+  \dimen0=\paperwidth
+  \multiply\dimen0 by \insertframenumber
+  \divide\dimen0 by \inserttotalframenumber
+  \edef\progressbarwidth{\the\dimen0}
+
+  \leavevmode%
+  \begin{beamercolorbox}[wd=\paperwidth,ht=1.5ex,dp=1ex]{progress bar}
+    \begin{beamercolorbox}[wd=\progressbarwidth,ht=1.5ex,dp=1ex]{progress bar progress}
+    \end{beamercolorbox}%
+  \end{beamercolorbox}%
+}
+%\setbeamertemplate{footline}[progress bar]
+%\setbeamercolor{progress bar}{fg=standardblue,bg=backgroundC}
+
+
+  %Frame numbering
+  \newcommand{\Ffootline}{\textcolor{standardblue}{\textbf{\inserttitle{}} $\bullet$  \insertsection{}  \hfill \insertframenumber{} / \inserttotalframenumber}}
+    
+  
+\setbeamertemplate{footline}{%
+  \usebeamerfont{structure}
+    \begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex]{title in head/foot}%
+      \Tiny\hspace*{4mm} \Ffootline \hspace{4mm}
+    \end{beamercolorbox}}
+
+
+
+   \let\oldtextbf\textbf
+     \renewcommand{\textbf}[1]{\textcolor{standardblue}{\oldtextbf{#1}}}
+
+  \newcommand{\cusemph}[1]{\textcolor{standardblue}{\textit{#1}}}
+
+  \newcommand{\mailto}[1]{\scriptsize{\textcolor{gray}{#1}}}
+
+
+\mode
+<all>
+
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+$if(lang)$
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[shorthands=off,$for(babel-otherlangs)$$babel-otherlangs$,$endfor$main=$babel-lang$]{babel}
+$if(babel-newcommands)$
+  $babel-newcommands$
+$endif$
+\else
+  \usepackage{polyglossia}
+  \setmainlanguage[$polyglossia-lang.options$]{$polyglossia-lang.name$}
+$for(polyglossia-otherlangs)$
+  \setotherlanguage[$polyglossia-otherlangs.options$]{$polyglossia-otherlangs.name$}
+$endfor$
+\fi
+$endif$
+\newif\ifbibliography
+$if(natbib)$
+\usepackage{natbib}
+\bibliographystyle{$if(biblio-style)$$biblio-style$$else$plainnat$endif$}
+$endif$
+$if(biblatex)$
+\usepackage[$if(biblio-style)$style=$biblio-style$,$endif$$for(biblatexoptions)$$biblatexoptions$$sep$,$endfor$]{biblatex}
+$for(bibliography)$
+\addbibresource{$bibliography$}
+$endfor$
+$endif$
+$if(verbatim-in-note)$
+\usepackage{fancyvrb}
+$endif$
+\hypersetup{
+$if(title-meta)$
+            pdftitle={$title-meta$},
+$endif$
+$if(author-meta)$
+            pdfauthor={$author-meta$},
+$endif$
+$if(keywords)$
+            pdfkeywords={$for(keywords)$$keywords$$sep$, $endfor$},
+$endif$
+$if(colorlinks)$
+            colorlinks=true,
+            linkcolor=$if(linkcolor)$$linkcolor$$else$Maroon$endif$,
+            citecolor=$if(citecolor)$$citecolor$$else$Blue$endif$,
+            urlcolor=$if(urlcolor)$$urlcolor$$else$Blue$endif$,
+$else$
+            pdfborder={0 0 0},
+$endif$
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+$if(verbatim-in-note)$
+\VerbatimFootnotes % allows verbatim text in footnotes
+$endif$
+$if(listings)$
+\usepackage{listings}
+$endif$
+$if(lhs)$
+\lstnewenvironment{code}{\lstset{language=Haskell,basicstyle=\small\ttfamily}}{}
+$endif$
+$if(highlighting-macros)$
+$highlighting-macros$
+$endif$
+$if(tables)$
+\usepackage{longtable,booktabs}
+\usepackage{caption}
+% These lines are needed to make table captions work with longtable:
+\makeatletter
+\def\fnum@table{\tablename~\thetable}
+\makeatother
+$endif$
+$if(graphics)$
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight0.8\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+$endif$
+
+% Prevent slide breaks in the middle of a paragraph:
+\widowpenalties 1 10000
+\raggedbottom
+
+$if(section-titles)$
+\AtBeginPart{
+  \let\insertpartnumber\relax
+  \let\partname\relax
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \let\insertsectionnumber\relax
+    \let\sectionname\relax
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \let\insertsubsectionnumber\relax
+  \let\subsectionname\relax
+  \frame{\subsectionpage}
+}
+$endif$
+
+$if(links-as-notes)$
+% Make links footnotes instead of hotlinks:
+\renewcommand{\href}[2]{#2\footnote{\url{#1}}}
+$endif$
+$if(strikeout)$
+\usepackage[normalem]{ulem}
+% avoid problems with \sout in headers with hyperref:
+\pdfstringdefDisableCommands{\renewcommand{\sout}{}}
+$endif$
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+$if(numbersections)$
+\setcounter{secnumdepth}{$if(secnumdepth)$$secnumdepth$$else$5$endif$}
+$else$
+\setcounter{secnumdepth}{0}
+$endif$
+$if(dir)$
+\ifxetex
+  % load bidi as late as possible as it modifies e.g. graphicx
+  $if(latex-dir-rtl)$
+  \usepackage[RTLdocument]{bidi}
+  $else$
+  \usepackage{bidi}
+  $endif$
+\fi
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \TeXXeTstate=1
+  \newcommand{\RL}[1]{\beginR #1\endR}
+  \newcommand{\LR}[1]{\beginL #1\endL}
+  \newenvironment{RTL}{\beginR}{\endR}
+  \newenvironment{LTR}{\beginL}{\endL}
+\fi
+$endif$
+$for(header-includes)$
+$header-includes$
+$endfor$
+
+$if(title)$
+\title{$title$}
+$endif$
+$if(subtitle)$
+\subtitle{$subtitle$}
+$endif$
+$if(author)$
+\author{$for(author)$$author$$sep$ \and $endfor$}
+$endif$
+$if(institute)$
+\institute{$for(institute)$$institute$$sep$ \and $endfor$}
+$endif$
+\date{$date$}
+
+\begin{document}
+$if(title)$
+\frame{\titlepage}
+$endif$
+
+$for(include-before)$
+$include-before$
+
+$endfor$
+$if(toc)$
+\begin{frame}
+\tableofcontents[hideallsubsections]
+\end{frame}
+
+$endif$
+$body$
+
+$if(natbib)$
+$if(bibliography)$
+$if(biblio-title)$
+$if(book-class)$
+\renewcommand\bibname{$biblio-title$}
+$else$
+\renewcommand\refname{$biblio-title$}
+$endif$
+$endif$
+\begin{frame}[allowframebreaks]{$biblio-title$}
+\bibliographytrue
+\bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
+\end{frame}
+
+$endif$
+$endif$
+$if(biblatex)$
+\begin{frame}[allowframebreaks]{$biblio-title$}
+\bibliographytrue
+\printbibliography[heading=none]
+\end{frame}
+
+$endif$
+$for(include-after)$
+$include-after$
+
+$endfor$
+\end{document}
