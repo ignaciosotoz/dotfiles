@@ -3,7 +3,8 @@
 
 # Path to your oh-my-zsh installation.
 export ZSH=/Users/ignaciosotoz/.oh-my-zsh
-export PATH="$HOME/anaconda3/bin:$PATH"
+export PATH="/Users/ignaciosotoz/anaconda3/bin:$PATH"
+export PATH=~/.bin:$PATH
 export LANG=en_US.UTF-8
 export LC_All=en_US.UTF-8
 export TERM=xterm-256color
@@ -20,6 +21,7 @@ antigen bundle git
 antigen bundle heroku
 antigen bundle pip
 #antigen bundle lein
+#antigen theme sorin
 antigen bundle command-not-found
 antigen bundle zsh-users/zsh-syntax-highlighting
 #antigen theme pure
@@ -48,8 +50,12 @@ alias tmuxkw="tmux kill-window"
 alias tmuxks="tmux kill-session"
 alias tmuxkp="tmux killp"
 alias tmux="TERM=screen-256color-bce tmux"
+alias mux="tmuxinator"
 # Todolist
 alias todo="todolist"
+# Rstudio
+alias rstudio="open -a RStudio"
+
 
 # The fuck!
 
@@ -125,7 +131,6 @@ p () {
 # Source ruby version manager
 source /Users/ignaciosotoz/.rvm/scripts/rvm
 # Source anaconda
-source "${HOME}/anaconda3/etc/profile.d/conda.sh"
 # Source fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -135,13 +140,15 @@ test -e "~/.iterm2_shell_integration.zsh" && source "~/.iterm2_shell_integration
 
 autoload -U promptinit; promptinit
 prompt pure
-PURE_PROMPT_SYMBOL=" "
-###
+####
 ### Ancilliary / Legacy
 ###
 
 ## Match shell and vim themes
-BASE16_SHELL=$HOME/.config/base16-shell/
+#BASE16_SHELL=$HOME/.config/base16-shell/
 #[ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
-#source ~/.iterm2_shell_integration.zs
+source ~/.iterm2_shell_integration.zsh
 #source ~/.tat/tat.sh
+eval "$(rbenv init -)"
+export PATH=$PATH:$(go env GOPATH)/bin
+
