@@ -9,9 +9,6 @@ export LANG=en_US.UTF-8
 export LC_All=en_US.UTF-8
 export TERM=xterm-256color
 ZSH_TMUX_AUTOSTART='true'
-# Set name of the theme to load. Optionally, if you set this to "random"
-# it'll load a random theme each time that oh-my-zsh is loaded.
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME=""
 
 source "$HOME/.antigen/antigen.zsh"
@@ -20,13 +17,9 @@ source $ZSH/oh-my-zsh.sh
 antigen bundle git
 antigen bundle heroku
 antigen bundle pip
-#antigen bundle lein
-#antigen theme sorin
 antigen bundle command-not-found
 antigen bundle zsh-users/zsh-syntax-highlighting
-#antigen theme pure
 antigen bundle supercrabtree/k
-# export MANPATH="/usr/local/man:$MANPATH"
 antigen apply 
 
 # Preferred editor for local and remote sessions
@@ -55,8 +48,10 @@ alias mux="tmuxinator"
 alias todo="todolist"
 # Rstudio
 alias rstudio="open -a RStudio"
-
-
+# List virtualenvs
+alias condaenvs="conda info --envs"
+# gitctm
+alias ctm="git add . && git commit -m 'Terremotoooooo!!!!11!111uno1!11' && git push origin master"
 # The fuck!
 
 eval $(thefuck --alias)
