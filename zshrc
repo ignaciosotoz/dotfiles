@@ -3,14 +3,13 @@
 
 # Path to your oh-my-zsh installation.
 export ZSH=/Users/ignaciosotoz/.oh-my-zsh
-export PATH="/Users/ignaciosotoz/anaconda3/bin:$PATH"
 export PATH=~/.bin:$PATH
 export LANG=en_US.UTF-8
 export LC_All=en_US.UTF-8
-export TERM=xterm-256color
+export DISABLE_AUTO_TITLE=true
+#modifiqué esta linea, xterm-256color es el original
+export TERM=screen-256color
 ZSH_TMUX_AUTOSTART='true'
-ZSH_THEME=""
-
 source "$HOME/.antigen/antigen.zsh"
 source $ZSH/oh-my-zsh.sh
 # User configuration
@@ -20,7 +19,7 @@ antigen bundle pip
 antigen bundle command-not-found
 antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle supercrabtree/k
-antigen apply 
+antigen apply
 
 # Preferred editor for local and remote sessions
  if [[ -n $SSH_CONNECTION ]]; then
@@ -31,7 +30,7 @@ antigen apply
 
 
 # Define plugins
-
+# GEOMETRY_PROMPT_PLUGINS=(virtualenv exec_time git hg)
 plugins+=(k git heroku)
 
 # Aliases
@@ -44,6 +43,9 @@ alias tmuxks="tmux kill-session"
 alias tmuxkp="tmux killp"
 alias tmux="TERM=screen-256color-bce tmux"
 alias mux="tmuxinator"
+
+# mount jupyter presentation server
+alias jupypres="jupyter nbconvert *.ipynb --to slides --post serve"
 # Todolist
 alias todo="todolist"
 # Rstudio
@@ -53,6 +55,9 @@ alias condaenvs="conda info --envs"
 # gitctm
 alias ctm="git add . && git commit -m 'Terremotoooooo!!!!11!111uno1!11' && git push origin master"
 # The fuck!
+# Chrome, slack
+alias chrome="open -a Google\ Chrome"
+alias slack="open -a Slack"
 
 eval $(thefuck --alias)
 eval $(thefuck --alias FUCK)
@@ -121,29 +126,24 @@ p () {
         | xargs $open > /dev/null 2> /dev/null
 }
 
+# source geometry
+# source /Users/ignaciosotoz/geometry/geometry.zsh
+# PROMPT_GEOMETRY_GIT_TIME=false
+# PROMPT_GEOMETRY_GIT_CONFLICTS=true
+# GEOMETRY_GIT_SEPARATOR="|"  
 
+autoload -U promptinit; promptinit
+prompt pure
 
 # Source ruby version manager
 source /Users/ignaciosotoz/.rvm/scripts/rvm
-# Source anaconda
 # Source fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 
 # Test zsh integration
 test -e "~/.iterm2_shell_integration.zsh" && source "~/.iterm2_shell_integration.zsh"
-
-autoload -U promptinit; promptinit
-prompt pure
-####
-### Ancilliary / Legacy
-###
-
-## Match shell and vim themes
-#BASE16_SHELL=$HOME/.config/base16-shell/
-#[ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
 source ~/.iterm2_shell_integration.zsh
-#source ~/.tat/tat.sh
 eval "$(rbenv init -)"
 export PATH=$PATH:$(go env GOPATH)/bin
-
+export PATH=/Users/ignaciosotoz/anaconda3/bin:/Users/ignaciosotoz/.rbenv/shims:/Users/ignaciosotoz/.rvm/gems/ruby-2.4.1/bin:/Users/ignaciosotoz/.rvm/gems/ruby-2.4.1@global/bin:/Users/ignaciosotoz/.rvm/rubies/ruby-2.4.1/bin:/Users/ignaciosotoz/.bin:/Users/ignaciosotoz/.cargo/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/TeX/texbin:/Users/ignaciosotoz/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/git:/Users/ignaciosotoz/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/heroku:/Users/ignaciosotoz/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/pip:/Users/ignaciosotoz/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/command-not-found:/Users/ignaciosotoz/.antigen/bundles/zsh-users/zsh-syntax-highlighting:/Users/ignaciosotoz/.antigen/bundles/supercrabtree/k:/Users/ignaciosotoz/.rvm/bin:/usr/local/opt/fzf/bin:/Users/ignaciosotoz/go/bin

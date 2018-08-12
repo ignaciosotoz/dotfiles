@@ -1,30 +1,11 @@
-# This tmux statusbar config was created by tmuxline.vim
-# on Sat, 06 Jan 2018
-
-set -g status-justify "centre"
-set -g status "on"
-set -g status-attr "none"
-set -g message-command-bg "colour4"
-set -g status-left-length "100"
-set -g pane-active-border-fg "colour4"
-set -g status-bg "colour237"
-set -g message-command-fg "colour4"
-set -g pane-border-fg "colour4"
-set -g message-bg "colour237"
-set -g status-left-attr "none"
-set -g status-right-attr "none"
-set -g status-right-length "100"
-set -g message-fg "colour4"
-setw -g window-status-fg "colour4"
-setw -g window-status-attr "none"
-setw -g window-status-activity-bg "colour237"
-setw -g window-status-activity-attr "underscore"
-setw -g window-status-activity-fg "colour4"
-setw -g window-status-separator ""
-setw -g window-status-bg "colour237"
-set -g status-left "#[fg=colour237,bg=colour237,nounderscore,noitalics,bold]##[fg=colour3,bg=colour237,bold]#S#[fg=colour3,bg=colour237]@#[fg=colour4,bg=colour237,bold]#H#[fg=colour237,bg=colour237,nobold,nounderscore,noitalics]#[fg=colour4,bg=colour237]#[fg=colour7,bg=colour237] #[fg=colour237,bg=colour,nounderscore,noitalics,bold]#{prefix_highlight}"
-#spotify version
-#set -g status-right "#[fg=colour4, bg=colour237]#{spotify_artist} - #{spotify_track} |#[fg=colour237,bg=colour237,nobold,nounderscore,noitalics]#[fg=colour4,bg=colour237]%H:%M|%a %h-%d|#{battery_status_fg}#{battery_percentage}"
-set -g status-right "#[fg=colour237,bg=colour237,nobold,nounderscore,noitalics]#[fg=colour4,bg=colour237]%a %h-%d | %H:%M | #{battery_status_fg}#{battery_icon} #{battery_percentage} "
-setw -g window-status-format "#[fg=colour4,bg=colour237,nobold,nounderscore,noitalics] #I:#W #[fg=colour237,bg=colour237,nobold,nounderscore,noitalics]"
-setw -g window-status-current-format "#[fg=colour237,bg=colour4,bold,nounderscore,noitalics]#[fg=,bg=colour237] #I:#W #[fg=colour237,bg=colour237,bold,nounderscore,italics]"
+# tmux-statusbar
+set -g default-terminal "screen-256color"
+set -g status-bg colour8
+set -g status-justify left
+set -g status-left-length 50
+set -g status-right-length 150
+set -g status-left '#[bg=colour7]#[fg=colour0,bold]#{?client_prefix,#[bg=colour2],} ☶ #S #[bg=colour8]#[fg=colour6]#{?client_prefix,#[fg=colour6],}#{?window_zoomed_flag, ⦿ ,}#[fg=colour8]#[bg=colour6]'
+set -g status-right " #[fg=colour7, bg=colour4] #{spotify_artist} - #{spotify_track} | #[fg=colour7,bg=colour4]%D | %H:%M | #{battery_icon} #{battery_percentage} "
+set -g window-status-format "#[fg=colour244]#[bg=colour8] #I #W #[fg=colour240]"
+setw -g window-status-current-attr bold
+setw -g window-status-current-format " #[fg=colour13,bg=colour4] *#[fg=colour7]#[bg=colour4]#I#[fg=colour8]:#W #[fg=colour4]#[bg=colour8]"

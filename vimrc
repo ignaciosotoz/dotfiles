@@ -28,23 +28,26 @@ Plug 'tpope/vim-fugitive'
 Plug 'tmhedberg/SimpylFold'
 Plug 'tpope/vim-surround'
 Plug 'roxma/nvim-completion-manager'
+Plug 'maxbrunsfeld/vim-yankstack'
+Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'w0rp/ale'
 Plug 'ryanoasis/vim-devicons'
 Plug 'scrooloose/nerdcommenter'
 Plug 'vim-scripts/Align'
-Plug 'garbas/vim-snipmate'
 Plug 'tomtom/tlib_vim'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'vim-scripts/vim-addon-mw-utils'
-Plug 'Yggdroot/indentLine'
+"Plug 'Yggdroot/indentLine'
 Plug 'blueyed/vim-diminactive'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-Plug 'luochen1990/rainbow'
-Plug 'vim-syntastic/syntastic'
 Plug 'mgee/lightline-bufferline'
 Plug 'maximbaz/lightline-ale'
+Plug 'junegunn/rainbow_parentheses.vim'
+Plug 'sheerun/vim-polyglot'
+Plug 'lifepillar/pgsql.vim'
+Plug 'wellle/targets.vim'
+Plug 'majutsushi/tagbar'
 """}}}
 
 """ Language Specific Plugins {{{
@@ -58,7 +61,6 @@ Plug 'maverickg/stan.vim'
 " Python
 Plug 'davidhalter/jedi-vim'
 Plug 'vim-scripts/indentpython.vim'
-Plug 'plytophogy/vim-virtualenv'
 
 if has('nvim')
     Plug 'Shougo/deoplete.nvim', { 'do' : 'UpdateRemotePlugins' }
@@ -89,7 +91,7 @@ endif
 
 " Markdown / LaTeX
 Plug 'plasticboy/vim-markdown'
-"Plug 'lvht/tagbar-markdown'
+Plug 'lvht/tagbar-markdown'
 Plug 'lervag/vimtex'
 
 " Julia
@@ -102,19 +104,14 @@ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries'}
 
 """ {{{ Coloschemes
 Plug 'cocopon/iceberg.vim'
-Plug 'rakr/vim-togglebg'
-Plug 'KeitaNakamura/neodark.vim'
 Plug 'mhartington/oceanic-next'
-Plug 'vim-scripts/Zenburn'
+Plug 'trevordmiller/nova-vim'
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'junegunn/seoul256.vim'
 Plug 'arcticicestudio/nord-vim'
 Plug 'morhetz/gruvbox'
-Plug 'rakr/vim-two-firewatch'
-Plug 'rakr/vim-one'
-Plug 'vim-scripts/Wombat'
-Plug 'chriskempson/base16-vim'
-Plug 'chriskempson/vim-tomorrow-theme'
+Plug 'whatyouhide/vim-gotham'
+Plug 'alexanderjeurissen/lumiere.vim'
 """ }}}
 
 call plug#end()
@@ -136,7 +133,7 @@ set tabstop=2
 set shiftwidth=4
 set expandtab
 " indent
-let g:indentLine_char ="┊"
+"let g:indentLine_char ="┆"
 " auto close parentheses, brackets, and curly brackets
 let g:AutoPairsFlyMode = 1
 " highlight current line
@@ -184,17 +181,18 @@ let g:tagbar_type_r = {
             \ }
 """ }}}
 
-" Theme and Airline {{{
-if !has('gui_running')
-    set t_Co=256
-endif
+
 set noshowmode
-colorscheme Tomorrow-Night-Eighties
+syntax enable
+colorscheme gotham
+set background=dark
+let g:gruvbox_contrast_dark='hard'
+let g:gruvbox_contrast_light = 'hard'
 set laststatus=2
 set showtabline=2
 let g:lightline = {}
 let g:lightline = {
-            \   'colorscheme': 'wombat',
+            \   'colorscheme': 'gotham',
             \   'active': {
             \     'left': [ [ 'mode' ], [ 'gitbranch', 'readonly', 'modified' ], [ 'pwd' ] ],
             \     'right': [ [ 'lineinfo','fileinfo'], ['linter_ok', 'linter_checking', 'linter_errors', 'linter_warnings', 'trailing' ] ],
@@ -218,7 +216,7 @@ let g:lightline = {
             \     's' : 'S',
             \     'S' : 'S-LINE',
             \     "\<C-s>": 'S-BLOCK',
-            \     't': '󰀣 ',
+            \     't': '⌕',
             \   },
             \   'component': {
             \     'lineinfo': '%l:%-v',
@@ -261,7 +259,7 @@ function! LightlineFileinfo()
 
     let encoding = &fenc !=# "" ? &fenc : &enc
     let format = &ff
-    let type = &ft !=# "" ? &ft : "no ft"
+    let type = &ft !=# "" ? &ft : "nil"
     return type . ' | ' . format . ' | ' . encoding
 endfunction
 """" Lightline ALE
@@ -272,8 +270,8 @@ let g:lightline#ale#indicator_checking = ' '
 """" lightline-bufferline
 let g:lightline#bufferline#filename_modifier = ':~:.' " Show filename relative to current directory
 let g:lightline#bufferline#unicode_symbols = 1        " Use fancy unicode symbols for various indicators
-let g:lightline#bufferline#modified = '※'             " Default pencil is too ugly
-let g:lightline#bufferline#unnamed = 'ℕ      '      " Default name when no buffer is opened
+let g:lightline#bufferline#modified = ' ※ '             " Default pencil is too ugly
+let g:lightline#bufferline#unnamed = '*Scratch*'      " Default name when no buffer is opened
 let g:lightline#bufferline#shorten_path = 1           " Compress ~/my/folder/name to ~/m/f/n
 
 
@@ -286,95 +284,107 @@ function! MyFileformat()
 endfunction
 " }}}
 
-
+" UltiSnips
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 " Markdown settings {{{
-let g:vim_markdown_fenced_languages = ['ruby=rb', 'python=py', 'r=r', 'javascript=js', 'julia=jl', 'bash=sh']
-set conceallevel=2
-let g:vim_markdown_math = 1
+    let g:vim_markdown_fenced_languages = ['ruby=rb', 'python=py', 'r=r', 'javascript=js', 'julia=jl', 'bash=sh']
+    set conceallevel=2
+    let g:vim_markdown_math = 1
 " }}}
 
 
 """ Mappings {{{
-
-nmap <leader>bl :BLines<CR>
-nmap <leader>ll :Lines<CR>
-nmap <leader>sn :Snippets<CR>
-nmap <leader>ag :Ag<CR>
-nmap <leader>bf :Buffer<CR>
-nmap <leader>tg :BTags<CR>
-nmap <leader>ta :Tags<CR>
-nmap <leader>fl :Files<CR>
-nmap <leader>cgc :BCommits<CR>
-nmap <leader>gc :Commits<CR>
-
-" Local leader
-let maplocalleader = ","
-" Change working directory
-nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
-" Buffer switch
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
-" Toggle tagbar
-"nmap <leader>tb :TagbarToggle<CR>
-" Toggle NERDtree
-nmap <leader>nn :NERDTreeToggle<CR>
-" Save and preview html
-nmap <leader>wv :w <Bar> !open %<CR>
-" New empty buffer
-nmap <leader>T :enew<cr>
-" Move to the next buffer
-nmap <leader>l :bnext<CR>
-" Move to the previous buffer
-nmap <leader>h :bprevious<CR>
-" Close the current buffer and move to the previous one
-nmap <leader>bq :bp <BAR> bd #<CR>
-" toggle invisible chars
-nmap <leader>i :set list!<CR>
-" Open Gundo
-nmap <leader>gs :GundoShow<CR>
-" Close Gundo
-nmap <leader>gh :GundoHide<CR>
-" Open Goyo
-nnoremap <Leader>G :Goyo<CR>
-" Quick save
-nnoremap <Leader>W :w<CR>
-" Quick close buffer
-nnoremap <Leader>C :close<CR>
+    " Local leader
+    let maplocalleader = ","
+    " fzf mappings
+    nmap <leader>bl :BLines<CR>
+    nmap <leader>ll :Lines<CR>
+    nmap <leader>sn :Snippets<CR>
+    nmap <leader>ag :Ag<CR>
+    nmap <leader>bf :Buffer<CR>
+    nmap <leader>ta :Tags<CR>
+    nmap <leader>fl :Files<CR>
+    nmap <leader>cgc :BCommits<CR>
+    nmap <leader>gc :Commits<CR>
+    " Change working directory
+    nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
+    " Buffer switch
+    nnoremap <C-J> <C-W><C-J>
+    nnoremap <C-K> <C-W><C-K>
+    nnoremap <C-L> <C-W><C-L>
+    nnoremap <C-H> <C-W><C-H>
+    " New empty buffer
+    nmap <leader>T :enew<cr>
+    " Move to the next buffer
+    nmap <leader>l :bnext<CR>
+    " Move to the previous buffer
+    nmap <leader>h :bprevious<CR>
+    " Close the current buffer and move to the previous one
+    nmap <leader>bq :bp <BAR> bd #<CR>
+    " Quick save
+    nnoremap <Leader>W :w<CR>
+    " Quick close buffer
+    nnoremap <Leader>C :close<CR>
+    " Quick delete buffer
+    nmap <Leader>bd :bd <BAR> :close <CR>
+    " Quick save and close
+    nnoremap <Leader>WQ :wq<CR>
+    " Quick delete buffer
+    nnoremap <Leader>bd :bd!<CR>
+    " quick source
+    nnoremap <Leader>src :so ~/.vimrc<CR>
+    " Toggle tagbar
+    nmap <leader>tb :TagbarToggle<CR>
+    " Toggle NERDtree
+    nmap <leader>nn :NERDTreeToggle<CR>
+    " Save and preview html
+    nmap <leader>wv :w <Bar> !open %<CR>
+    " toggle invisible chars
+    nmap <leader>i :set list!<CR>
+    " Open Gundo
+    nmap <leader>gs :GundoShow<CR>
+    " Close Gundo
+    nmap <leader>gh :GundoHide<CR>
+    " Open Goyo
+    nnoremap <Leader>G :Goyo<CR>
+    " yankstack
+    nmap <Leader>Y :Yanks<CR>
 """}}}
 
 
 """ Markdown + TeX {{{
-let g:vim_markdown_conceal = 0
-let g:tex_conceal = ""
-let g:vim_markdown_math = 1
-let g:vimtex_compiler_progname = 'nvr'
+    let g:vim_markdown_conceal = 0
+    let g:tex_conceal = ""
+    let g:vim_markdown_math = 1
+    let g:vimtex_compiler_progname = 'nvr'
 """ }}}
 
 """ DevIcons {{{
-let g:webdevicons_conceal_nerdtree_brackets = 1
-let g:WebDevIconsUnicodeDecorateFolderNodes = 1
-let g:WebDevIconsNerdTreeAfterGlyphPadding = ''
-if exists('g:loaded_webdevicons')
-    call webdevicons#refresh()
-endif
+    let g:lightline#bufferline#enable_devicons = 1
+    let g:webdevicons_conceal_nerdtree_brackets = 1
+    let g:WebDevIconsUnicodeDecorateFolderNodes = 1
+    let g:WebDevIconsNerdTreeAfterGlyphPadding = ''
+    if exists('g:loaded_webdevicons')
+        call webdevicons#refresh()
+    endif
 """ }}}
 
 """ Vim + Tmux Config {{{
-set clipboard=unnamed
-let g:yankring_clipboard_monitor=0
-let g:tmux_navigator_save_on_switch = 2
+    set clipboard=unnamed
+    let g:yankring_clipboard_monitor=0
+    let g:tmux_navigator_save_on_switch = 2
 """ }}}
 
 " Ale settings {{{
-let g:ale_sign_error = "ӿ"
-let g:ale_sign_warning = '‼'
-highlight clear ALEErrorSign
-highlight clear ALEWarningSign
-let g:ale_emit_conflict_warnings = 0
-let g:ale_lint_delay = 600
+    let g:ale_sign_error = "·"
+    let g:ale_sign_warning = '·'
+    highlight clear ALEErrorSign
+    highlight clear ALEWarningSign
+    let g:ale_emit_conflict_warnings = 0
+    let g:ale_lint_delay = 600
 " }}}
 
 
@@ -397,9 +407,9 @@ let g:limelight_conceal_ctermfg= 238
 function! s:goyo_enter()
     if has('gui_running')
         set fullscreen
-        set background=light
+        colorscheme OceanicNextLight
         set linespace=7
-        set g:goyo_width = 120
+        set g:goyo_width = 160
     elseif exists('$TMUX')
         silent !tmux set status off
     endif
@@ -413,6 +423,7 @@ function! s:goyo_leave()
         set nofullscreen
         set background=dark
         set linespace=0
+        colorscheme gotham
     elseif exists('$TMUX')
         silent !tmux set status on
     endif
@@ -451,5 +462,32 @@ let g:fzf_colors =
             \ 'spinner': ['fg', 'Label'],
             \ 'header':  ['fg', 'Comment'] }
 """ }}}
+
+
+augroup configgroup
+    autocmd!
+    "autocmd VimEnter so ~/.vimrc
+    "autocmd BufWritePre *.py, *.js, *.md, *.txt, *.R, *.jl, *.sh
+                "\:call <SID>StripTrailingWhitespaces()
+    " ruby
+    autocmd BufEnter *.rb setlocal tabstop=2
+    autocmd BufEnter *.rb setlocal shiftwidth=2
+    autocmd BufEnter *.rb setlocal softtabstop=2
+    " bash
+    autocmd BufEnter *.sh setlocal tabstop=2
+    autocmd BufEnter *.sh setlocal shiftwidth=2
+    autocmd BufEnter *.sh setlocal softtabstop=2
+    " python
+    autocmd BufEnter *.py setlocal tabstop=4
+    autocmd BufEnter *.py setlocal shiftwidth=4
+    autocmd BufEnter *.py setlocal softtabstop=4
+    " R
+    autocmd BufEnter *.R setlocal tabstop=4
+    autocmd BufEnter *.R setlocal shiftwidth=4
+    autocmd BufEnter *.R setlocal softtabstop=4
+augroup END
+
+
+
 
 "vim:foldmethod=marker:foldlevel=0
