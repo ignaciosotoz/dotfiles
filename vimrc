@@ -9,10 +9,11 @@ if empty(glob('~/.config/nvim/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.vim/plugged')
-
+set rtp+=/usr/local/opt/fzf
 
 """ General Plugins {{{
 Plug 'godlygeek/tabular'
+Plug 'ap/vim-css-color'
 Plug 'chrisbra/csv.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'junegunn/goyo.vim'
@@ -21,7 +22,7 @@ Plug '/usr/local/opt/fzf'
 Plug 'airblade/vim-gitgutter'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'jiangmiao/auto-pairs'
-Plug 'itchyny/lightline.vim'
+"Plug 'itchyny/lightline.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'sjl/gundo.vim'
 Plug 'tpope/vim-fugitive'
@@ -41,8 +42,8 @@ Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'vim-scripts/vim-addon-mw-utils'
 "Plug 'Yggdroot/indentLine'
 Plug 'blueyed/vim-diminactive'
-Plug 'mgee/lightline-bufferline'
-Plug 'maximbaz/lightline-ale'
+"Plug 'mgee/lightline-bufferline'
+"Plug 'maximbaz/lightline-ale'
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'lifepillar/pgsql.vim'
@@ -112,6 +113,8 @@ Plug 'arcticicestudio/nord-vim'
 Plug 'morhetz/gruvbox'
 Plug 'whatyouhide/vim-gotham'
 Plug 'alexanderjeurissen/lumiere.vim'
+Plug 'chriskempson/base16-vim'
+Plug 'daviesjamie/vim-base16-lightline'
 """ }}}
 
 call plug#end()
@@ -182,19 +185,20 @@ let g:tagbar_type_r = {
 """ }}}
 
 
-set noshowmode
+set showmode
 syntax enable
-colorscheme gotham
-set background=dark
-let g:gruvbox_contrast_dark='hard'
-let g:gruvbox_contrast_light = 'hard'
+if filereadable(expand("~/.vimrc_background"))
+  let base16colorspace=256
+  source ~/.vimrc_background
+endif
+"colorscheme def
 set laststatus=2
 set showtabline=2
 let g:lightline = {}
 let g:lightline = {
-            \   'colorscheme': 'gotham',
+            \   'colorscheme': 'wombat',
             \   'active': {
-            \     'left': [ [ 'mode' ], [ 'gitbranch', 'readonly', 'modified' ], [ 'pwd' ] ],
+            \     'left': [ [ 'mode' ], [ 'pwd' ] ],
             \     'right': [ [ 'lineinfo','fileinfo'], ['linter_ok', 'linter_checking', 'linter_errors', 'linter_warnings', 'trailing' ] ],
             \   },
             \   'inactive': {
@@ -203,7 +207,7 @@ let g:lightline = {
             \   },
             \   'tabline': {
             \     'left': [ [ 'buffers' ] ],
-            \     'right': [ [ 'close' ] ],
+            \     'right':[ [ 'close' ]  ] ,
             \   },
             \   'mode_map': {
             \     'n' : 'N',
@@ -219,7 +223,7 @@ let g:lightline = {
             \     't': '⌕',
             \   },
             \   'component': {
-            \     'lineinfo': '%l:%-v',
+            \     'lineinfo': '%3l:%-2v',
             \   },
             \   'component_expand': {
             \     'buffers': 'lightline#bufferline#buffers',
@@ -260,7 +264,8 @@ function! LightlineFileinfo()
     let encoding = &fenc !=# "" ? &fenc : &enc
     let format = &ff
     let type = &ft !=# "" ? &ft : "nil"
-    return type . ' | ' . format . ' | ' . encoding
+    "return type . ' | ' . format . ' | ' . encoding
+    return type
 endfunction
 """" Lightline ALE
 let g:lightline#ale#indicator_warnings = ' '
@@ -270,8 +275,8 @@ let g:lightline#ale#indicator_checking = ' '
 """" lightline-bufferline
 let g:lightline#bufferline#filename_modifier = ':~:.' " Show filename relative to current directory
 let g:lightline#bufferline#unicode_symbols = 1        " Use fancy unicode symbols for various indicators
-let g:lightline#bufferline#modified = ' ※ '             " Default pencil is too ugly
-let g:lightline#bufferline#unnamed = '*Scratch*'      " Default name when no buffer is opened
+let g:lightline#bufferline#modified = ' ϟ '             " Default pencil is too ugly
+let g:lightline#bufferline#unnamed = 'Ø'      " Default name when no buffer is opened
 let g:lightline#bufferline#shorten_path = 1           " Compress ~/my/folder/name to ~/m/f/n
 
 
@@ -352,6 +357,14 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
     nnoremap <Leader>G :Goyo<CR>
     " yankstack
     nmap <Leader>Y :Yanks<CR>
+    " Light background
+    nnoremap <leader>slb :set background=light<CR>
+    " Next error
+    nmap <leader>ne :ALENext<CR>
+    " Enable spanish spell checker
+    nnoremap <Leader>scs :set spelllang=es<CR>:setlocal spell<CR>
+    " Enable english spell checker
+    nnoremap <Leader>sce :set spelllang=en<CR>:setlocal spell<CR>
 """}}}
 
 

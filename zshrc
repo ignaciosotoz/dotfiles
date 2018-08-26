@@ -41,6 +41,8 @@ alias tmuxns="tmux new-session"
 alias tmuxkw="tmux kill-window"
 alias tmuxks="tmux kill-session"
 alias tmuxkp="tmux killp"
+alias tmuxls="tmux list-session"
+alias tmuxat="tmux a -t "
 alias tmux="TERM=screen-256color-bce tmux"
 alias mux="tmuxinator"
 
@@ -54,14 +56,9 @@ alias rstudio="open -a RStudio"
 alias condaenvs="conda info --envs"
 # gitctm
 alias ctm="git add . && git commit -m 'Terremotoooooo!!!!11!111uno1!11' && git push origin master"
-# The fuck!
 # Chrome, slack
 alias chrome="open -a Google\ Chrome"
 alias slack="open -a Slack"
-
-eval $(thefuck --alias)
-eval $(thefuck --alias FUCK)
-eval $(thefuck --alias fff)
 
 # Custom functions
 # Create .gitignore on the fly.
@@ -126,6 +123,13 @@ p () {
         | xargs $open > /dev/null 2> /dev/null
 }
 
+notes() {
+    $EDITOR ~/.notes/"$*".md
+}
+
+list-notes() {
+    find ~/.notes/ -type f | fzf
+}
 # source geometry
 # source /Users/ignaciosotoz/geometry/geometry.zsh
 # PROMPT_GEOMETRY_GIT_TIME=false
@@ -147,3 +151,6 @@ source ~/.iterm2_shell_integration.zsh
 eval "$(rbenv init -)"
 export PATH=$PATH:$(go env GOPATH)/bin
 export PATH=/Users/ignaciosotoz/anaconda3/bin:/Users/ignaciosotoz/.rbenv/shims:/Users/ignaciosotoz/.rvm/gems/ruby-2.4.1/bin:/Users/ignaciosotoz/.rvm/gems/ruby-2.4.1@global/bin:/Users/ignaciosotoz/.rvm/rubies/ruby-2.4.1/bin:/Users/ignaciosotoz/.bin:/Users/ignaciosotoz/.cargo/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/TeX/texbin:/Users/ignaciosotoz/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/git:/Users/ignaciosotoz/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/heroku:/Users/ignaciosotoz/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/pip:/Users/ignaciosotoz/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/command-not-found:/Users/ignaciosotoz/.antigen/bundles/zsh-users/zsh-syntax-highlighting:/Users/ignaciosotoz/.antigen/bundles/supercrabtree/k:/Users/ignaciosotoz/.rvm/bin:/usr/local/opt/fzf/bin:/Users/ignaciosotoz/go/bin
+
+BASE16_SHELL=$HOME/.config/base16-shell/
+[ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
