@@ -136,8 +136,15 @@ list-notes() {
 # PROMPT_GEOMETRY_GIT_CONFLICTS=true
 # GEOMETRY_GIT_SEPARATOR="|"  
 
-autoload -U promptinit; promptinit
-prompt pure
+export REPORTTIME=2
+setopt prompt_subst
+source ~/zsh-git-prompt/zshrc.sh
+if [ $SSH_CONNECTION ]; then SSH="%n@%m"; else SSH=""; fi
+PROMPT='%(?..$PR_RED%?\
+)%{$reset_color%}%(!.$PR_RED%SROOT%s$PR_NO_COLOUR@%B%m%b.$SSH)$(git_super_status)%# '
+RPROMPT='%~'
+#autoload -U promptinit; promptinit
+#prompt pure
 
 # Source ruby version manager
 source /Users/ignaciosotoz/.rvm/scripts/rvm

@@ -13,6 +13,7 @@ set rtp+=/usr/local/opt/fzf
 
 """ General Plugins {{{
 Plug 'godlygeek/tabular'
+Plug 'rizzatti/dash.vim'
 Plug 'ap/vim-css-color'
 Plug 'chrisbra/csv.vim'
 Plug 'junegunn/limelight.vim'
@@ -20,9 +21,7 @@ Plug 'junegunn/goyo.vim'
 Plug 'junegunn/fzf.vim'
 Plug '/usr/local/opt/fzf'
 Plug 'airblade/vim-gitgutter'
-Plug 'terryma/vim-multiple-cursors'
 Plug 'jiangmiao/auto-pairs'
-"Plug 'itchyny/lightline.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'sjl/gundo.vim'
 Plug 'tpope/vim-fugitive'
@@ -34,21 +33,21 @@ Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'w0rp/ale'
-Plug 'ryanoasis/vim-devicons'
 Plug 'scrooloose/nerdcommenter'
 Plug 'vim-scripts/Align'
 Plug 'tomtom/tlib_vim'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'vim-scripts/vim-addon-mw-utils'
-"Plug 'Yggdroot/indentLine'
 Plug 'blueyed/vim-diminactive'
-"Plug 'mgee/lightline-bufferline'
-"Plug 'maximbaz/lightline-ale'
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'lifepillar/pgsql.vim'
 Plug 'wellle/targets.vim'
 Plug 'majutsushi/tagbar'
+Plug 'ncm2/ncm2-bufword'
+Plug 'ncm2/ncm2-tmux'
+Plug 'ncm2/ncm2-path'
+Plug 'ncm2/ncm2-ultisnips'
 """}}}
 
 """ Language Specific Plugins {{{
@@ -103,19 +102,7 @@ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries'}
 """}}}
 
 
-""" {{{ Coloschemes
-Plug 'cocopon/iceberg.vim'
-Plug 'mhartington/oceanic-next'
-Plug 'trevordmiller/nova-vim'
-Plug 'NLKNguyen/papercolor-theme'
-Plug 'junegunn/seoul256.vim'
-Plug 'arcticicestudio/nord-vim'
-Plug 'morhetz/gruvbox'
-Plug 'whatyouhide/vim-gotham'
-Plug 'alexanderjeurissen/lumiere.vim'
 Plug 'chriskempson/base16-vim'
-Plug 'daviesjamie/vim-base16-lightline'
-""" }}}
 
 call plug#end()
 
@@ -375,16 +362,6 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
     let g:vimtex_compiler_progname = 'nvr'
 """ }}}
 
-""" DevIcons {{{
-    let g:lightline#bufferline#enable_devicons = 1
-    let g:webdevicons_conceal_nerdtree_brackets = 1
-    let g:WebDevIconsUnicodeDecorateFolderNodes = 1
-    let g:WebDevIconsNerdTreeAfterGlyphPadding = ''
-    if exists('g:loaded_webdevicons')
-        call webdevicons#refresh()
-    endif
-""" }}}
-
 """ Vim + Tmux Config {{{
     set clipboard=unnamed
     let g:yankring_clipboard_monitor=0
@@ -459,29 +436,13 @@ let g:tagbar_autofocus = 1
 let g:diminactive_use_syntax = 1
 """}}}
 
-""" Fzf Colors {{{
-let g:fzf_colors =
-            \ { 'fg':      ['fg', 'Normal'],
-            \ 'bg':      ['bg', 'Normal'],
-            \ 'hl':      ['fg', 'Comment'],
-            \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-            \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-            \ 'hl+':     ['fg', 'Statement'],
-            \ 'info':    ['fg', 'PreProc'],
-            \ 'border':  ['fg', 'Ignore'],
-            \ 'prompt':  ['fg', 'Conditional'],
-            \ 'pointer': ['fg', 'Exception'],
-            \ 'marker':  ['fg', 'Keyword'],
-            \ 'spinner': ['fg', 'Label'],
-            \ 'header':  ['fg', 'Comment'] }
-""" }}}
 
 
 augroup configgroup
     autocmd!
     "autocmd VimEnter so ~/.vimrc
     "autocmd BufWritePre *.py, *.js, *.md, *.txt, *.R, *.jl, *.sh
-                "\:call <SID>StripTrailingWhitespaces()
+                "\:call <SID>StripTrailingWhitespaces()_
     " ruby
     autocmd BufEnter *.rb setlocal tabstop=2
     autocmd BufEnter *.rb setlocal shiftwidth=2
