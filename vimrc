@@ -1,5 +1,5 @@
 set encoding=utf8
-
+set noshowmode
 filetype off
 
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
@@ -178,103 +178,31 @@ if filereadable(expand("~/.vimrc_background"))
   let base16colorspace=256
   source ~/.vimrc_background
 endif
-"colorscheme def
+
+
+" StatusbaAar
 set laststatus=2
-set showtabline=2
-let g:lightline = {}
-let g:lightline = {
-            \   'colorscheme': 'wombat',
-            \   'active': {
-            \     'left': [ [ 'mode' ], [ 'pwd' ] ],
-            \     'right': [ [ 'lineinfo','fileinfo'], ['linter_ok', 'linter_checking', 'linter_errors', 'linter_warnings', 'trailing' ] ],
-            \   },
-            \   'inactive': {
-            \     'left': [ [ 'pwd' ] ],
-            \     'right': [ [ 'lineinfo' ], [ 'fileinfo' ] ],
-            \   },
-            \   'tabline': {
-            \     'left': [ [ 'buffers' ] ],
-            \     'right':[ [ 'close' ]  ] ,
-            \   },
-            \   'mode_map': {
-            \     'n' : 'N',
-            \     'i' : 'I',
-            \     'R' : 'R',
-            \     'v' : 'V',
-            \     'V' : 'V-LINE',
-            \     "\<C-v>": 'V-BLOCK',
-            \     'c' : 'C',
-            \     's' : 'S',
-            \     'S' : 'S-LINE',
-            \     "\<C-s>": 'S-BLOCK',
-            \     't': '⌕',
-            \   },
-            \   'component': {
-            \     'lineinfo': '%3l:%-2v',
-            \   },
-            \   'component_expand': {
-            \     'buffers': 'lightline#bufferline#buffers',
-            \     'trailing': 'lightline#trailing_whitespace#component',
-            \     'linter_ok': 'lightline#ale#ok',
-            \     'linter_checking': 'lightline#ale#checking',
-            \     'linter_warnings': 'lightline#ale#warnings',
-            \     'linter_errors': 'lightline#ale#errors',
-            \   },
-            \   'component_function': {
-            \     'gitbranch': 'fugitive#head',
-            \     'pwd': 'LightlineWorkingDirectory',
-            \     'fileinfo': 'LightlineFileinfo',
-            \     'filetype': 'MyFiletype',
-            \     'fileformat': 'MyFileformat'
-            \   },
-            \   'component_type': {
-            \     'buffers': 'tabsel',
-            \     'trailing': 'error',
-            \     'linter_ok': 'left',
-            \     'linter_checking': 'left',
-            \     'linter_warnings': 'warning',
-            \     'linter_errors': 'error',
-            \   },
-            \ }
+set statusline=
+set statusline+=\ %{ModeCurrent()}
+set statusline+=\ ∷
+set statusline+=\ %f
+set statusline+=\ ∷
+set statusline+=\ %M
+set statusline+=%=
+set statusline+=%l:%L
+set statusline+=\ ⵂ
+set statusline+=\ %P
+set statusline+=\ 
+
+let g:currentmode={ 'n' : 'n', 'no' : 'N·Operator Pending ', 'v' : 'v', 'V' : 'v-line', '^V' : 'v-block ', 's' : 's ', 'S': 's-line', '^S' : 's-block ', 'i' : 'i', 'R' : 'Replace ', 'Rv' : 'V·Replace ', 'c' : 'Command ', 'cv' : 'Vim Ex ', 'ce' : 'Ex ', 'r' : 'Prompt ', 'rm' : 'More ', 'r?' : 'Confirm ', '!' : 'Shell ', 't' : 'Terminal '}
 
 
-function! LightlineWorkingDirectory()
-    return &ft =~ 'help\|qf' ? '' : fnamemodify(getcwd(), ":~:.")
+function! ModeCurrent() abort
+    let l:modecurrent = mode()
+        let l:modelist = tolower(get(g:currentmode, l:modecurrent, 'V·Block '))
+    let l:current_status_mode = l:modelist
+    return l:current_status_mode
 endfunction
-
-
-function! LightlineFileinfo()
-    if winwidth(0) < 90
-        return ''
-    endif
-
-    let encoding = &fenc !=# "" ? &fenc : &enc
-    let format = &ff
-    let type = &ft !=# "" ? &ft : "nil"
-    "return type . ' | ' . format . ' | ' . encoding
-    return type
-endfunction
-"""" Lightline ALE
-let g:lightline#ale#indicator_warnings = ' '
-let g:lightline#ale#indicator_errors = ' '
-let g:lightline#ale#indicator_checking = ' '
-
-"""" lightline-bufferline
-let g:lightline#bufferline#filename_modifier = ':~:.' " Show filename relative to current directory
-let g:lightline#bufferline#unicode_symbols = 1        " Use fancy unicode symbols for various indicators
-let g:lightline#bufferline#modified = ' ϟ '             " Default pencil is too ugly
-let g:lightline#bufferline#unnamed = 'Ø'      " Default name when no buffer is opened
-let g:lightline#bufferline#shorten_path = 1           " Compress ~/my/folder/name to ~/m/f/n
-
-
-function! MyFiletype()
-    return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
-endfunction
-
-function! MyFileformat()
-    return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
-endfunction
-" }}}
 
 " UltiSnips
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -383,12 +311,6 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:gundo_prefer_python3 = 1
 " }}}
 
-" Nord {{{
-let g:nord_italic = 1
-let g:nord_italic_comments = 1
-let g:nord_comment_brightness = 15
-" }}}
-
 """ Goyo + Limelight {{{
 let g:limelight_paragraph_span = 1
 let g:limelight_priority = -1
@@ -397,7 +319,6 @@ let g:limelight_conceal_ctermfg= 238
 function! s:goyo_enter()
     if has('gui_running')
         set fullscreen
-        colorscheme OceanicNextLight
         set linespace=7
         set g:goyo_width = 160
     elseif exists('$TMUX')
