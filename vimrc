@@ -1,5 +1,4 @@
 set encoding=utf8
-set noshowmode
 filetype off
 
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
@@ -172,7 +171,7 @@ let g:tagbar_type_r = {
 """ }}}
 
 
-set showmode
+set noshowmode
 syntax enable
 if filereadable(expand("~/.vimrc_background"))
   let base16colorspace=256
@@ -276,6 +275,7 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
     nnoremap <leader>slb :set background=light<CR>
     " Next error
     nmap <leader>ne :ALENext<CR>
+    nmap <leader>at :ALEToggle<CR>
     " Enable spanish spell checker
     nnoremap <Leader>scs :set spelllang=es<CR>:setlocal spell<CR>
     " Enable english spell checker
@@ -297,10 +297,10 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 """ }}}
 
 " Ale settings {{{
-    let g:ale_sign_error = "·"
-    let g:ale_sign_warning = '·'
     highlight clear ALEErrorSign
     highlight clear ALEWarningSign
+    let g:ale_sign_error = "·"
+    let g:ale_sign_warning = '·'
     let g:ale_emit_conflict_warnings = 0
     let g:ale_lint_delay = 600
 " }}}

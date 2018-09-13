@@ -7,6 +7,7 @@ export PATH=~/.bin:$PATH
 export LANG=en_US.UTF-8
 export LC_All=en_US.UTF-8
 export DISABLE_AUTO_TITLE=true
+export LOLCOMMITS_DELAY=3
 #modifiqué esta linea, xterm-256color es el original
 export TERM=screen-256color
 ZSH_TMUX_AUTOSTART='true'
@@ -140,9 +141,10 @@ export REPORTTIME=2
 setopt prompt_subst
 source ~/zsh-git-prompt/zshrc.sh
 if [ $SSH_CONNECTION ]; then SSH="%n@%m"; else SSH=""; fi
-PROMPT='%(?..$PR_RED%?\
-)%{$reset_color%}%(!.$PR_RED%SROOT%s$PR_NO_COLOUR@%B%m%b.$SSH)$(git_super_status)%# '
-RPROMPT='%~'
+#PROMPT='%(?..$PR_RED%?\
+#)%{$reset_color%}%(!.$PR_RED%SROOT%s$PR_NO_COLOUR@%B%m%b.$SSH)$(git_super_status)%# '
+#LPROMPT='%~'
+PROMPT='%~%b$(git_super_status) %# '
 #autoload -U promptinit; promptinit
 #prompt pure
 
@@ -157,7 +159,7 @@ test -e "~/.iterm2_shell_integration.zsh" && source "~/.iterm2_shell_integration
 source ~/.iterm2_shell_integration.zsh
 eval "$(rbenv init -)"
 export PATH=$PATH:$(go env GOPATH)/bin
-export PATH=/Users/ignaciosotoz/anaconda3/bin:/Users/ignaciosotoz/.rbenv/shims:/Users/ignaciosotoz/.rvm/gems/ruby-2.4.1/bin:/Users/ignaciosotoz/.rvm/gems/ruby-2.4.1@global/bin:/Users/ignaciosotoz/.rvm/rubies/ruby-2.4.1/bin:/Users/ignaciosotoz/.bin:/Users/ignaciosotoz/.cargo/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/TeX/texbin:/Users/ignaciosotoz/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/git:/Users/ignaciosotoz/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/heroku:/Users/ignaciosotoz/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/pip:/Users/ignaciosotoz/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/command-not-found:/Users/ignaciosotoz/.antigen/bundles/zsh-users/zsh-syntax-highlighting:/Users/ignaciosotoz/.antigen/bundles/supercrabtree/k:/Users/ignaciosotoz/.rvm/bin:/usr/local/opt/fzf/bin:/Users/ignaciosotoz/go/bin
+export PATH=/Users/ignaciosotoz/.rbenv/shims:/Users/ignaciosotoz/.rvm/gems/ruby-2.4.1/bin:/Users/ignaciosotoz/.rvm/gems/ruby-2.4.1@global/bin:/Users/ignaciosotoz/.rvm/rubies/ruby-2.4.1/bin:/Users/ignaciosotoz/.bin:/Users/ignaciosotoz/.cargo/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/TeX/texbin:/Users/ignaciosotoz/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/git:/Users/ignaciosotoz/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/heroku:/Users/ignaciosotoz/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/pip:/Users/ignaciosotoz/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/command-not-found:/Users/ignaciosotoz/.antigen/bundles/zsh-users/zsh-syntax-highlighting:/Users/ignaciosotoz/.antigen/bundles/supercrabtree/k:/Users/ignaciosotoz/.rvm/bin:/usr/local/opt/fzf/bin:/Users/ignaciosotoz/go/bin
 
 BASE16_SHELL=$HOME/.config/base16-shell/
 [ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"

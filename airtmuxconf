@@ -4,8 +4,8 @@ set -g status-bg colour8
 set -g status-justify left
 set -g status-left-length 50
 set -g status-right-length 150
-set -g status-left '#[bg=colour8]#[fg=colour4,bold]#{?client_prefix,#[bg=colour8]#[fg=colour6],} ☶ #S #[bg=colour8]#[fg=colour2]#{?client_prefix,#[fg=colour2],}#{?window_zoomed_flag, ⦿ ,}#[bg=colour8,fg=colour6]'
-set -g status-right " #[fg=colour6, bg=colour8] #{spotify_artist} - #{spotify_track} | #[fg=colour6,bg=colour8]%D | %H:%M | #{battery_icon} #{battery_percentage} "
-set -g window-status-format "#[fg=colour6]#[bg=colour8] #I #W #[fg=colour6]"
+set -g status-left '#[bg=colour16, fg=colour8, bold] #H #[bg=colour8,fg=colour16,bold]#{?client_prefix,#[bg=colour0]#[fg=colour16],} #S #{?client_prefix,#[fg=colour17],}#{?window_zoomed_flag,▣ ,}'
+set -g status-right " #[fg=colour0, bg=colour8] #{spotify_artist} - #{spotify_track} | #[fg=colour0,bg=colour8]%D | %H:%M | #{battery_icon} #{battery_percentage} "
+set -g window-status-format "#[fg=colour0] #I #W #[fg=colour0]"
 setw -g window-status-current-attr bold
-setw -g window-status-current-format " #[fg=colour16,bg=colour0] *#[fg=colour8,bold]#[bg=colour0]#I#[fg=colour8]:#W #[fg=colour8]#[bg=colour0]"
+setw -g window-status-current-format "#[bg=colour0] #[fg=colour16,bold]#[bg=colour0]#I#[fg=colour8]:#W "
