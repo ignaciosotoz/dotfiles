@@ -13,7 +13,11 @@ set rtp+=/usr/local/opt/fzf
 """ General Plugins {{{
 Plug 'godlygeek/tabular'
 Plug 'rizzatti/dash.vim'
+Plug 'vim-pandoc/vim-pandoc-syntax'
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-rmarkdown'
 Plug 'ap/vim-css-color'
+Plug 'ap/vim-buftabline'
 Plug 'chrisbra/csv.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'junegunn/goyo.vim'
@@ -27,6 +31,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tmhedberg/SimpylFold'
 Plug 'tpope/vim-surround'
 Plug 'roxma/nvim-completion-manager'
+Plug 'szymonmaszke/vimpyter'
 Plug 'maxbrunsfeld/vim-yankstack'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -47,6 +52,7 @@ Plug 'ncm2/ncm2-bufword'
 Plug 'ncm2/ncm2-tmux'
 Plug 'ncm2/ncm2-path'
 Plug 'ncm2/ncm2-ultisnips'
+"Plug 'derekwyatt/vim-scala'
 """}}}
 
 """ Language Specific Plugins {{{
@@ -89,12 +95,17 @@ else
 endif
 
 " Markdown / LaTeX
-Plug 'plasticboy/vim-markdown'
+Plug 'gabrielelana/vim-markdown'
 Plug 'lvht/tagbar-markdown'
 Plug 'lervag/vimtex'
 
 " Julia
 Plug 'JuliaEditorSupport/julia-vim'
+let g:tagbar_type_julia = {
+    \ 'ctagstype' : 'julia',
+    \ 'kinds'     : [
+        \ 't:struct', 'f:function', 'm:macro', 'c:const']
+    \ }
 
 " Go
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries'}
@@ -131,7 +142,7 @@ set cursorline
 set backspace=indent,eol,start
 " display warnings
 "set statusline+=%#warningmsg#
-"set hidden
+set hidden
 " Split opening
 set splitbelow
 set splitright
@@ -147,7 +158,9 @@ autocmd BufRead,BufNewFile *.jl :set filetype=julia
 let g:deoplete#enable_at_startup = 1
 let g:javascript_plugin_flow = 1
 """}}}
-
+autocmd Filetype ipynb nmap <silent><Leader>b :VimpyterInsertPythonBlock<CR>
+autocmd Filetype ipynb nmap <silent><Leader>j :VimpyterStartJupyter<CR>
+autocmd Filetype ipynb nmap <silent><Leader>n :VimpyterStartNteract<CR>
 
 """ R {{{
 
@@ -156,8 +169,7 @@ let R_assign = 2
 " R do not indent commented
 let R_indent_commented = 0
 " R open Object Browser on top of Console, 10 lines height
-let R_objbr_place = "console"
-let R_objbr_w=10
+let R_objbr_place = "BOTTOM"
 let R_objbr_opendf =1
 " Extend tagbar to fetch R files. (depends on ~/.ctags)
 let g:tagbar_type_r = {
@@ -168,6 +180,12 @@ let g:tagbar_type_r = {
             \ 'v:FunctionVariables',
             \ ]
             \ }
+
+" R output is highlighted with current colorscheme
+let g:rout_follow_colorscheme = 1
+
+" R commands in R output are highlighted
+let g:Rout_more_colors = 0
 """ }}}
 
 
@@ -186,9 +204,11 @@ set statusline+=\ %{ModeCurrent()}
 set statusline+=\ ∷
 set statusline+=\ %f
 set statusline+=\ ∷
+set statusline+=\ %{LinterStatus()} 
+set statusline+=\ ∷
 set statusline+=\ %M
 set statusline+=%=
-set statusline+=%l:%L
+set statusline+=\ %l:%L
 set statusline+=\ ⵂ
 set statusline+=\ %P
 set statusline+=\ 
@@ -275,13 +295,19 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
     nnoremap <leader>slb :set background=light<CR>
     " Next error
     nmap <leader>ne :ALENext<CR>
-    nmap <leader>at :ALEToggle<CR>
     " Enable spanish spell checker
     nnoremap <Leader>scs :set spelllang=es<CR>:setlocal spell<CR>
     " Enable english spell checker
     nnoremap <Leader>sce :set spelllang=en<CR>:setlocal spell<CR>
 """}}}
 
+function! LinterStatus() abort
+    let l:counts = ale#statusline#Count(bufnr(''))
+    let l:all_errors = l:counts.error + l:counts.style_error
+    let l:all_non_errors = l:counts.total - l:all_errors
+
+    return l:counts.total == 0 ? 'ok' : printf('⚠  %d   ⃠ %d', all_non_errors, all_errors )
+endfunction
 
 """ Markdown + TeX {{{
     let g:vim_markdown_conceal = 0
@@ -294,6 +320,12 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
     set clipboard=unnamed
     let g:yankring_clipboard_monitor=0
     let g:tmux_navigator_save_on_switch = 2
+    let g:tmux_navigator_no_mappings = 1
+
+    nnoremap <silent> <c-h> :TmuxNavigateLeft<cr>
+    nnoremap <silent> <c-j> :TmuxNavigateDown<cr>
+    nnoremap <silent> <c-k> :TmuxNavigateUp<cr>
+    nnoremap <silent> <c-l> :TmuxNavigateRight<cr>
 """ }}}
 
 " Ale settings {{{
@@ -365,21 +397,24 @@ augroup configgroup
     "autocmd BufWritePre *.py, *.js, *.md, *.txt, *.R, *.jl, *.sh
                 "\:call <SID>StripTrailingWhitespaces()_
     " ruby
-    autocmd BufEnter *.rb setlocal tabstop=2
-    autocmd BufEnter *.rb setlocal shiftwidth=2
-    autocmd BufEnter *.rb setlocal softtabstop=2
+    autocmd BufEnter,BufNewFile,BufFilePre,BufRead *.rb setlocal tabstop=2
+    autocmd BufEnter,BufNewFile,BufFilePre,BufRead *.rb setlocal shiftwidth=2
+    autocmd BufEnter,BufNewFile,BufFilePre,BufRead *.rb setlocal softtabstop=2
     " bash
-    autocmd BufEnter *.sh setlocal tabstop=2
-    autocmd BufEnter *.sh setlocal shiftwidth=2
-    autocmd BufEnter *.sh setlocal softtabstop=2
+    autocmd BufEnter,BufNewFile,BufFilePre,BufRead *.sh setlocal tabstop=2
+    autocmd BufEnter,BufNewFile,BufFilePre,BufRead *.sh setlocal shiftwidth=2
+    autocmd BufEnter,BufNewFile,BufFilePre,BufRead *.sh setlocal softtabstop=2
     " python
-    autocmd BufEnter *.py setlocal tabstop=4
-    autocmd BufEnter *.py setlocal shiftwidth=4
-    autocmd BufEnter *.py setlocal softtabstop=4
+    autocmd BufEnter,BufNewFile,BufFilePre,BufRead *.py setlocal tabstop=4
+    autocmd BufEnter,BufNewFile,BufFilePre,BufRead *.py setlocal shiftwidth=4
+    autocmd BufEnter,BufNewFile,BufFilePre,BufRead *.py setlocal softtabstop=4
     " R
-    autocmd BufEnter *.R setlocal tabstop=4
-    autocmd BufEnter *.R setlocal shiftwidth=4
-    autocmd BufEnter *.R setlocal softtabstop=4
+    autocmd BufEnter,BufNewFile,BufFilePre,BufRead *.R setlocal tabstop=4
+    autocmd BufEnter,BufNewFile,BufFilePre,BufRead *.R setlocal shiftwidth=4
+    autocmd BufEnter,BufNewFile,BufFilePre,BufRead *.R setlocal softtabstop=4
+    autocmd BufEnter,BufNewFile,BufRead, BufNewFile *.rmd set filetype=rmarkdown
+    " Markdown
+    autocmd BufEnter,BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
 augroup END
 
 

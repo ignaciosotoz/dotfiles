@@ -2,38 +2,118 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/ignaciosotoz/.oh-my-zsh
-export PATH=~/.bin:$PATH
+export ZSH="/Users/isz/.oh-my-zsh"
+# export anaconda
+export PATH="/Users/isz/anaconda3/bin:$PATH"
+export EDITOR='vim'
+export PATH="/Applications/Julia-1.0.app/Contents/Resources/julia/bin:$PATH"
+# Lolcommit osx delay
+LOLCOMMITS_DELAY=3
 export LANG=en_US.UTF-8
-export LC_All=en_US.UTF-8
-export DISABLE_AUTO_TITLE=true
-export LOLCOMMITS_DELAY=3
-#modifiqué esta linea, xterm-256color es el original
-export TERM=screen-256color
-ZSH_TMUX_AUTOSTART='true'
-source "$HOME/.antigen/antigen.zsh"
+export LC_ALL=en_US.UTF-8
+
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time oh-my-zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
+# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+#ZSH_THEME="refined"
+
+# Set list of themes to pick from when loading at random
+# Setting this variable when ZSH_THEME=random will cause zsh to load
+# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
+# If set to an empty array, this variable will have no effect.
+# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+
+# Uncomment the following line to use case-sensitive completion.
+# CASE_SENSITIVE="true"
+
+# Uncomment the following line to use hyphen-insensitive completion.
+# Case-sensitive completion must be off. _ and - will be interchangeable.
+# HYPHEN_INSENSITIVE="true"
+
+# Uncomment the following line to disable bi-weekly auto-update checks.
+# DISABLE_AUTO_UPDATE="true"
+
+# Uncomment the following line to change how often to auto-update (in days).
+# export UPDATE_ZSH_DAYS=13
+
+# Uncomment the following line to disable colors in ls.
+# DISABLE_LS_COLORS="true"
+
+# Uncomment the following line to disable auto-setting terminal title.
+# DISABLE_AUTO_TITLE="true"
+
+# Uncomment the following line to enable command auto-correction.
+# ENABLE_CORRECTION="true"
+
+# Uncomment the following line to display red dots whilst waiting for completion.
+# COMPLETION_WAITING_DOTS="true"
+
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Uncomment the following line if you want to change the command execution time
+# stamp shown in the history command output.
+# You can set one of the optional three formats:
+# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# or set a custom format using the strftime function format specifications,
+# see 'man strftime' for details.
+# HIST_STAMPS="mm/dd/yyyy"
+
+# Would you like to use another custom folder than $ZSH/custom?
+# ZSH_CUSTOM=/path/to/new-custom-folder
+
+# Which plugins would you like to load?
+# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
+# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(
+git
+)
+
 source $ZSH/oh-my-zsh.sh
+source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 # User configuration
-antigen bundle git
-antigen bundle heroku
-antigen bundle pip
-antigen bundle command-not-found
-antigen bundle zsh-users/zsh-syntax-highlighting
-antigen bundle supercrabtree/k
-antigen apply
+
+# export MANPATH="/usr/local/man:$MANPATH"
+
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
- if [[ -n $SSH_CONNECTION ]]; then
-   export EDITOR='vim'
- else
-   export EDITOR='nvim'
- fi
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
 
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
 
-# Define plugins
-# GEOMETRY_PROMPT_PLUGINS=(virtualenv exec_time git hg)
-plugins+=(k git heroku)
+# ssh
+# export SSH_KEY_PATH="~/.ssh/rsa_id"
 
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+# Base16 Shell
+
+BASE16_SHELL="$HOME/.config/base16-shell/"
+[ -n "$PS1" ] && \
+    [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
+    eval "$("$BASE16_SHELL/profile_helper.sh")"
+#
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
+plugins=(fzf-zsh git)
+
+autoload -U promptinit; promptinit
+prompt pure
 # Aliases
 alias vim="nvim"
 # Tmux related
@@ -59,107 +139,72 @@ alias condaenvs="conda info --envs"
 alias ctm="git add . && git commit -m 'Terremotoooooo!!!!11!111uno1!11' && git push origin master"
 # Chrome, slack
 alias chrome="open -a Google\ Chrome"
-alias slack="open -a Slack"
-
-# Custom functions
-# Create .gitignore on the fly.
-
-function gitignore() { curl -L -s https://www.gitignore.io/api/$@ ;}
+alias preview='fzf --preview="head -$LINES {}"'
 
 
-# Find and open files
 
-fe() {
-  local files
-  IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
-  [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
+# fco_preview - checkout git branch/tag, with a preview showing the commits between the tag/branch and HEAD
+gitbranches() {
+    local tags branches target
+    tags=$(
+    git tag | awk '{print "\x1b[31;1mtag\x1b[m\t" $1}') || return
+    branches=$(
+    git branch --all | grep -v HEAD |
+        sed "s/.* //" | sed "s#remotes/[^/]*/##" |
+        sort -u | awk '{print "\x1b[34;1mbranch\x1b[m\t" $1}') || return
+    target=$(
+    (echo "$tags"; echo "$branches") |
+        fzf --no-hscroll --no-multi --delimiter="\t" -n 2 \
+        --ansi --preview="git log -200 --pretty=format:%s $(echo {+2..} |  sed 's/$/../' )" ) || return
+    git checkout $(echo "$target" | awk '{print $2}')
 }
 
-# Find and kill processes
 
-fkill() {
-    local pid
-    pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
+brewupdate() {
+    local upd=$(brew leaves | fzf -m)
 
-    if ["x$pid" != "x"]; then
-        echo $pid | xargs kill -${1:-9}
-    fi
-}
+    if [[ $upd ]]; then
+        for prog in $(echo $upd);
+        do; brew upgrade $prog; done;
+        fi
+    }
 
-# find and read pdf
+    brewinstall() {
+        local inst=$(brew search | fzf -m)
 
-p () {
-    local DIR open
-    declare -A already
-    DIR="${HOME}/.cache/pdftotext"
-    mkdir -p "${DIR}"
-    if [ "$(uname)" = "Darwin" ]; then
-        open=open
-    else
-        open="gio open"
-    fi
+        if [[ $inst ]]; then
+            for prog in $(echo $inst);
+            do; brew install $prog; done;
+            fi
+        }
 
-    {
-    ag -g ".pdf$"; # fast, without pdftotext
-    ag -g ".pdf$" \
-    | while read -r FILE; do
-        local EXPIRY HASH CACHE
-        HASH=$(md5sum "$FILE" | cut -c 1-32)
-        # Remove duplicates (file that has same hash as already seen file)
-        [ ${already[$HASH]+abc} ] && continue # see https://stackoverflow.com/a/13221491
-        already[$HASH]=$HASH
-        EXPIRY=$(( 86400 + $RANDOM * 20 )) # 1 day (86400 seconds) plus some random
-        CMD="pdftotext -f 1 -l 1 '$FILE' - 2>/dev/null | tr \"\n\" \"_\" "
-        CACHE="$DIR/$HASH"
-        test -f "${CACHE}" && [ $(expr $(date +%s) - $(date -r "$CACHE" +%s)) -le $EXPIRY ] || eval "$CMD" > "${CACHE}"
-        echo -e "$FILE\t$(cat ${CACHE})"
+gitstashes() {
+    local out q k sha
+    while out=$(
+        git stash list --pretty="%C(yellow)%h %>(14)%Cgreen%cr %C(blue)%gs" |
+            fzf --ansi --no-sort --query="$q" --print-query \
+            --expect=ctrl-d,ctrl-b);
+    do
+        mapfile -t out <<< "$out"
+        q="${out[0]}"
+        k="${out[1]}"
+        sha="${out[-1]}"
+        sha="${sha%% *}"
+        [[ -z "$sha" ]] && continue
+        if [[ "$k" == 'ctrl-d' ]]; then
+            git diff $sha
+        elif [[ "$k" == 'ctrl-b' ]]; then
+            git stash branch "stash-$sha" $sha
+            break;
+        else
+            git stash show -p $sha
+        fi
     done
-    } | fzf -e  -d '\t' \
-        --preview-window up:75% \
-        --preview '
-                v=$(echo {q} | tr " " "|");
-                echo {1} | grep -E "^|$v" -i --color=always;
-                pdftotext -f 1 -l 1 {1} - | grep -E "^|$v" -i --color=always' \
-        | awk 'BEGIN {FS="\t"; OFS="\t"}; {print "\""$1"\""}' \
-        | xargs $open > /dev/null 2> /dev/null
 }
 
-notes() {
-    $EDITOR ~/.notes/"$*".md
-}
+export FZF_COMPLETION_TRIGGER='~~'
 
-list-notes() {
-    find ~/.notes/ -type f | fzf
-}
-# source geometry
-# source /Users/ignaciosotoz/geometry/geometry.zsh
-# PROMPT_GEOMETRY_GIT_TIME=false
-# PROMPT_GEOMETRY_GIT_CONFLICTS=true
-# GEOMETRY_GIT_SEPARATOR="|"  
+source /Users/isz/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-export REPORTTIME=2
-setopt prompt_subst
-source ~/zsh-git-prompt/zshrc.sh
-if [ $SSH_CONNECTION ]; then SSH="%n@%m"; else SSH=""; fi
-#PROMPT='%(?..$PR_RED%?\
-#)%{$reset_color%}%(!.$PR_RED%SROOT%s$PR_NO_COLOUR@%B%m%b.$SSH)$(git_super_status)%# '
-#LPROMPT='%~'
-PROMPT='%~%b$(git_super_status) %# '
-#autoload -U promptinit; promptinit
-#prompt pure
-
-# Source ruby version manager
-source /Users/ignaciosotoz/.rvm/scripts/rvm
-# Source fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-
-# Test zsh integration
-test -e "~/.iterm2_shell_integration.zsh" && source "~/.iterm2_shell_integration.zsh"
-source ~/.iterm2_shell_integration.zsh
-eval "$(rbenv init -)"
-export PATH=$PATH:$(go env GOPATH)/bin
-export PATH=/Users/ignaciosotoz/.rbenv/shims:/Users/ignaciosotoz/.rvm/gems/ruby-2.4.1/bin:/Users/ignaciosotoz/.rvm/gems/ruby-2.4.1@global/bin:/Users/ignaciosotoz/.rvm/rubies/ruby-2.4.1/bin:/Users/ignaciosotoz/.bin:/Users/ignaciosotoz/.cargo/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/TeX/texbin:/Users/ignaciosotoz/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/git:/Users/ignaciosotoz/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/heroku:/Users/ignaciosotoz/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/pip:/Users/ignaciosotoz/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/command-not-found:/Users/ignaciosotoz/.antigen/bundles/zsh-users/zsh-syntax-highlighting:/Users/ignaciosotoz/.antigen/bundles/supercrabtree/k:/Users/ignaciosotoz/.rvm/bin:/usr/local/opt/fzf/bin:/Users/ignaciosotoz/go/bin
-
-BASE16_SHELL=$HOME/.config/base16-shell/
-[ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
+PURE_PROMPT_SYMBOL=" "
