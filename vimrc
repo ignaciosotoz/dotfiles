@@ -12,34 +12,29 @@ set rtp+=/usr/local/opt/fzf
 
 """ General Plugins {{{
 Plug 'godlygeek/tabular'
-Plug 'rizzatti/dash.vim'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-rmarkdown'
-Plug 'ap/vim-css-color'
-Plug 'ap/vim-buftabline'
+"Plug 'ap/vim-buftabline'
 Plug 'chrisbra/csv.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/fzf.vim'
+Plug 'junegunn/vim-emoji'
 Plug '/usr/local/opt/fzf'
 Plug 'airblade/vim-gitgutter'
 Plug 'jiangmiao/auto-pairs'
 Plug 'scrooloose/nerdtree'
 Plug 'sjl/gundo.vim'
 Plug 'tpope/vim-fugitive'
-Plug 'tmhedberg/SimpylFold'
 Plug 'tpope/vim-surround'
-Plug 'roxma/nvim-completion-manager'
-Plug 'szymonmaszke/vimpyter'
-Plug 'maxbrunsfeld/vim-yankstack'
+Plug 'roxma/vim-hug-neovim-rpc'
+Plug 'roxma/nvim-yarp'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'w0rp/ale'
 Plug 'scrooloose/nerdcommenter'
-Plug 'vim-scripts/Align'
-Plug 'tomtom/tlib_vim'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'vim-scripts/vim-addon-mw-utils'
 Plug 'blueyed/vim-diminactive'
@@ -48,6 +43,7 @@ Plug 'sheerun/vim-polyglot'
 Plug 'lifepillar/pgsql.vim'
 Plug 'wellle/targets.vim'
 Plug 'majutsushi/tagbar'
+Plug 'ncm2/ncm2'
 Plug 'ncm2/ncm2-bufword'
 Plug 'ncm2/ncm2-tmux'
 Plug 'ncm2/ncm2-path'
@@ -64,15 +60,12 @@ Plug 'vim-scripts/R-syntax-highlighting'
 Plug 'maverickg/stan.vim'
 
 " Python
+Plug 'ncm2/ncm2-jedi'
 Plug 'davidhalter/jedi-vim'
 Plug 'vim-scripts/indentpython.vim'
-
-if has('nvim')
-    Plug 'Shougo/deoplete.nvim', { 'do' : 'UpdateRemotePlugins' }
-    Plug 'zchee/deoplete-jedi'
-else
-    Plug 'Shougo/neocomplete.vim'
-endif
+Plug 'Shougo/deoplete.nvim', { 'do' : 'UpdateRemotePlugins' }
+Plug 'zchee/deoplete-jedi'
+Plug 'Shougo/neocomplete.vim'
 
 " Ruby/Rails
 Plug 'tpope/vim-rails'
@@ -85,14 +78,6 @@ else
     Plug 'Shougo/neocomplete.vim'
 endif
 
-" Javascript
-Plug 'pangloss/vim-javascript'
-
-if has('nvim')
-    Plug 'carlitux/deoplete-ternjs', { 'do' : 'npm install -g tern' }
-else
-    Plug 'Shougo/neocomplete.vim'
-endif
 
 " Markdown / LaTeX
 Plug 'gabrielelana/vim-markdown'
@@ -107,13 +92,8 @@ let g:tagbar_type_julia = {
         \ 't:struct', 'f:function', 'm:macro', 'c:const']
     \ }
 
-" Go
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries'}
-"""}}}
-
 
 Plug 'chriskempson/base16-vim'
-
 call plug#end()
 
 
@@ -127,15 +107,13 @@ set nofoldenable
 set foldlevel=1
 set modifiable
 set wildmenu
-set number
+set relativenumber
 set noswapfile
 set tabstop=2
 set shiftwidth=4
 set expandtab
 " indent
 "let g:indentLine_char ="┆"
-" auto close parentheses, brackets, and curly brackets
-let g:AutoPairsFlyMode = 1
 " highlight current line
 set cursorline
 " standarize backspace deletion
@@ -162,6 +140,7 @@ autocmd Filetype ipynb nmap <silent><Leader>b :VimpyterInsertPythonBlock<CR>
 autocmd Filetype ipynb nmap <silent><Leader>j :VimpyterStartJupyter<CR>
 autocmd Filetype ipynb nmap <silent><Leader>n :VimpyterStartNteract<CR>
 
+set completefunc=emoji#complete
 """ R {{{
 
 " R assign keymap
@@ -180,7 +159,6 @@ let g:tagbar_type_r = {
             \ 'v:FunctionVariables',
             \ ]
             \ }
-
 " R output is highlighted with current colorscheme
 let g:rout_follow_colorscheme = 1
 
@@ -190,7 +168,9 @@ let g:Rout_more_colors = 0
 
 
 set noshowmode
+set nospell
 syntax enable
+set colorcolumn=100
 if filereadable(expand("~/.vimrc_background"))
   let base16colorspace=256
   source ~/.vimrc_background
@@ -291,9 +271,8 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
     nnoremap <Leader>G :Goyo<CR>
     " yankstack
     nmap <Leader>Y :Yanks<CR>
-    " Light background
-    nnoremap <leader>slb :set background=light<CR>
     " Next error
+    nnoremap <leader>at :ALEToggle<CR>
     nmap <leader>ne :ALENext<CR>
     " Enable spanish spell checker
     nnoremap <Leader>scs :set spelllang=es<CR>:setlocal spell<CR>
@@ -417,7 +396,9 @@ augroup configgroup
     autocmd BufEnter,BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
 augroup END
 
+autocmd BufEnter * call ncm2#enable_for_buffer()
+set completeopt=noinsert,menuone,noselect
+set shortmess+=c
 
 
 
-"vim:foldmethod=marker:foldlevel=0

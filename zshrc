@@ -75,7 +75,7 @@ git
 )
 
 source $ZSH/oh-my-zsh.sh
-source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+#source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -112,8 +112,14 @@ BASE16_SHELL="$HOME/.config/base16-shell/"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 plugins=(fzf-zsh git)
 
-autoload -U promptinit; promptinit
-prompt pure
+# Antigen bundle
+source /usr/local/share/antigen/antigen.zsh
+
+antigen theme evan 
+antigen apply
+
+#autoload -U promptinit; promptinit
+#prompt pure
 # Aliases
 alias vim="nvim"
 # Tmux related
@@ -169,14 +175,14 @@ brewupdate() {
         fi
     }
 
-    brewinstall() {
-        local inst=$(brew search | fzf -m)
+brewinstall() {
+    local inst=$(brew search | fzf -m)
 
-        if [[ $inst ]]; then
-            for prog in $(echo $inst);
-            do; brew install $prog; done;
-            fi
-        }
+    if [[ $inst ]]; then
+        for prog in $(echo $inst);
+        do; brew install $prog; done;
+        fi
+    }
 
 gitstashes() {
     local out q k sha
@@ -204,7 +210,9 @@ gitstashes() {
 
 export FZF_COMPLETION_TRIGGER='~~'
 
-source /Users/isz/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+#source /Users/isz/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-PURE_PROMPT_SYMBOL=" "
+#PURE_PROMPT_SYMBOL=" "
+eval "$(rbenv init -)"
+function gi() { curl -L -s https://www.gitignore.io/api/$@ ;}
