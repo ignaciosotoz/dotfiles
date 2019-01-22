@@ -8,7 +8,7 @@ export PATH="/Users/isz/anaconda3/bin:$PATH"
 export EDITOR='vim'
 export PATH="/Applications/Julia-1.0.app/Contents/Resources/julia/bin:$PATH"
 # Lolcommit osx delay
-LOLCOMMITS_DELAY=3
+LOLCOMMITS_DELAY=5
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
@@ -145,7 +145,7 @@ alias condaenvs="conda info --envs"
 alias ctm="git add . && git commit -m 'Terremotoooooo!!!!11!111uno1!11' && git push origin master"
 # Chrome, slack
 alias chrome="open -a Google\ Chrome"
-alias preview='fzf --preview="head -$LINES {}"'
+alias preview='fzf --preview="pygmentize {}" --margin 2,5'
 
 
 
@@ -210,7 +210,7 @@ gitstashes() {
 
 export FZF_COMPLETION_TRIGGER='~~'
 
-#source /Users/isz/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /Users/isz/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 #PURE_PROMPT_SYMBOL=" "

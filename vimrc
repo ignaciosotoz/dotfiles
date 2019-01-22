@@ -15,6 +15,7 @@ Plug 'godlygeek/tabular'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-rmarkdown'
+Plug 'jpitblado/vim-stata'
 "Plug 'ap/vim-buftabline'
 Plug 'chrisbra/csv.vim'
 Plug 'junegunn/limelight.vim'
@@ -170,7 +171,6 @@ let g:Rout_more_colors = 0
 set noshowmode
 set nospell
 syntax enable
-set colorcolumn=100
 if filereadable(expand("~/.vimrc_background"))
   let base16colorspace=256
   source ~/.vimrc_background
@@ -217,6 +217,7 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 """ Mappings {{{
     " Local leader
+    let mapleader=" "
     let maplocalleader = ","
     " fzf mappings
     nmap <leader>bl :BLines<CR>
