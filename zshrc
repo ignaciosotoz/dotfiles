@@ -3,24 +3,16 @@
 
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/isz/.oh-my-zsh"
-# export anaconda
-export PATH="/Users/isz/anaconda3/bin:$PATH"
-export EDITOR='vim'
-export PATH="/Applications/Julia-1.0.app/Contents/Resources/julia/bin:$PATH"
-# Lolcommit osx delay
-LOLCOMMITS_DELAY=5
-export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-#ZSH_THEME="refined"
+# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+# ZSH_THEME="robbyrussell"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
+# a theme from this variable instead of looking in $ZSH/themes/
 # If set to an empty array, this variable will have no effect.
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
@@ -34,8 +26,14 @@ export LC_ALL=en_US.UTF-8
 # Uncomment the following line to disable bi-weekly auto-update checks.
 # DISABLE_AUTO_UPDATE="true"
 
+# Uncomment the following line to automatically update without prompting.
+# DISABLE_UPDATE_PROMPT="true"
+
 # Uncomment the following line to change how often to auto-update (in days).
 # export UPDATE_ZSH_DAYS=13
+
+# Uncomment the following line if pasting URLs and other text is messed up.
+# DISABLE_MAGIC_FUNCTIONS=true
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
@@ -66,16 +64,14 @@ export LC_ALL=en_US.UTF-8
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
 # Which plugins would you like to load?
-# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(
-git
-)
+plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
-#source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -93,34 +89,14 @@ source $ZSH/oh-my-zsh.sh
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
-# ssh
-# export SSH_KEY_PATH="~/.ssh/rsa_id"
-
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
-# Base16 Shell
-
-BASE16_SHELL="$HOME/.config/base16-shell/"
-[ -n "$PS1" ] && \
-    [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
-    eval "$("$BASE16_SHELL/profile_helper.sh")"
 #
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-plugins=(fzf-zsh git)
-
-# Antigen bundle
-source /usr/local/share/antigen/antigen.zsh
-
-antigen theme evan 
-antigen apply
-
-#autoload -U promptinit; promptinit
-#prompt pure
-# Aliases
 alias vim="nvim"
 # Tmux related
 alias tmuxnw="tmux new-window"
@@ -132,21 +108,25 @@ alias tmuxls="tmux list-session"
 alias tmuxat="tmux a -t "
 alias tmux="TERM=screen-256color-bce tmux"
 alias mux="tmuxinator"
+alias code="open -a Visual\ Studio\ Code"
 
-# mount jupyter presentation server
-alias jupypres="jupyter nbconvert *.ipynb --to slides --post serve"
-# Todolist
-alias todo="todolist"
-# Rstudio
-alias rstudio="open -a RStudio"
-# List virtualenvs
-alias condaenvs="conda info --envs"
-# gitctm
-alias ctm="git add . && git commit -m 'Terremotoooooo!!!!11!111uno1!11' && git push origin master"
-# Chrome, slack
-alias chrome="open -a Google\ Chrome"
-alias preview='fzf --preview="pygmentize {}" --margin 2,5'
+# .zshrc
+autoload -U promptinit; promptinit
+prompt pure
 
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
+
+  autoload -Uz compinit
+  compinit
+fi
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/isz/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/isz/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/isz/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/isz/google-cloud-sdk/completion.zsh.inc'; fi
+function gi() { curl -sLw n https://www.toptal.com/developers/gitignore/api/$@ ;}
 
 
 # fco_preview - checkout git branch/tag, with a preview showing the commits between the tag/branch and HEAD
@@ -213,6 +193,11 @@ export FZF_COMPLETION_TRIGGER='~~'
 source /Users/isz/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-#PURE_PROMPT_SYMBOL=" "
-eval "$(rbenv init -)"
-function gi() { curl -L -s https://www.gitignore.io/api/$@ ;}
+
+
+# Base16 Shell
+BASE16_SHELL="$HOME/.config/base16-shell/"
+[ -n "$PS1" ] && \
+    [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
+        eval "$("$BASE16_SHELL/profile_helper.sh")"
+source /Users/isz/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
