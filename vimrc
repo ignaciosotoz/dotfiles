@@ -12,44 +12,39 @@ set rtp+=/usr/local/opt/fzf
 
 """ General Plugins {{{
 Plug 'godlygeek/tabular'
+Plug 'jiangmiao/auto-pairs'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-rmarkdown'
-Plug 'jpitblado/vim-stata'
-"Plug 'ap/vim-buftabline'
+Plug 'Glench/Vim-Jinja2-Syntax'
 Plug 'chrisbra/csv.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/fzf.vim'
-Plug 'junegunn/vim-emoji'
+Plug 'ryanoasis/vim-devicons'
 Plug '/usr/local/opt/fzf'
 Plug 'airblade/vim-gitgutter'
-Plug 'jiangmiao/auto-pairs'
 Plug 'scrooloose/nerdtree'
 Plug 'sjl/gundo.vim'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-surround'
 Plug 'roxma/vim-hug-neovim-rpc'
 Plug 'roxma/nvim-yarp'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'w0rp/ale'
+Plug 'dense-analysis/ale'
 Plug 'scrooloose/nerdcommenter'
 Plug 'tmux-plugins/vim-tmux-focus-events'
-Plug 'vim-scripts/vim-addon-mw-utils'
 Plug 'blueyed/vim-diminactive'
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'lifepillar/pgsql.vim'
-Plug 'wellle/targets.vim'
 Plug 'majutsushi/tagbar'
 Plug 'ncm2/ncm2'
 Plug 'ncm2/ncm2-bufword'
 Plug 'ncm2/ncm2-tmux'
 Plug 'ncm2/ncm2-path'
 Plug 'ncm2/ncm2-ultisnips'
-"Plug 'derekwyatt/vim-scala'
+Plug 'ap/vim-buftabline'
 """}}}
 
 """ Language Specific Plugins {{{
@@ -80,6 +75,9 @@ else
 endif
 
 
+" Node/JS
+Plug 'ternjs/tern_for_vim', { 'do' : 'npm install' }
+
 " Markdown / LaTeX
 Plug 'gabrielelana/vim-markdown'
 Plug 'lvht/tagbar-markdown'
@@ -108,10 +106,11 @@ set nofoldenable
 set foldlevel=1
 set modifiable
 set wildmenu
-set relativenumber
+set number relativenumber
 set noswapfile
 set tabstop=2
 set shiftwidth=4
+set nuw=6
 set expandtab
 " indent
 "let g:indentLine_char ="┆"
@@ -171,30 +170,13 @@ let g:Rout_more_colors = 0
 set noshowmode
 set nospell
 syntax enable
+set mouse=a
 if filereadable(expand("~/.vimrc_background"))
   let base16colorspace=256
   source ~/.vimrc_background
 endif
 
-
-" StatusbaAar
-set laststatus=2
-set statusline=
-set statusline+=\ %{ModeCurrent()}
-set statusline+=\ ∷
-set statusline+=\ %f
-set statusline+=\ ∷
-set statusline+=\ %{LinterStatus()} 
-set statusline+=\ ∷
-set statusline+=\ %M
-set statusline+=%=
-set statusline+=\ %l:%L
-set statusline+=\ ⵂ
-set statusline+=\ %P
-set statusline+=\ 
-
-let g:currentmode={ 'n' : 'n', 'no' : 'N·Operator Pending ', 'v' : 'v', 'V' : 'v-line', '^V' : 'v-block ', 's' : 's ', 'S': 's-line', '^S' : 's-block ', 'i' : 'i', 'R' : 'Replace ', 'Rv' : 'V·Replace ', 'c' : 'Command ', 'cv' : 'Vim Ex ', 'ce' : 'Ex ', 'r' : 'Prompt ', 'rm' : 'More ', 'r?' : 'Confirm ', '!' : 'Shell ', 't' : 'Terminal '}
-
+let g:currentmode={ 'n' : 'ﳁ ','no' : 'N·Operator Pending ', 'v' : '濾','V' : '閭','^V' : '閭','' : 's ','S': 's-line','^S' : 's-block ','i' : ' ','R' : 'Replace ','Rv' : 'V·Replace ','c' : ' ','cv' : 'Vim Ex ','ce' : 'Ex ','r' : ' ','rm' : 'More ','r?' : 'Confirm ','!' : ' ','t' : ' '}
 
 function! ModeCurrent() abort
     let l:modecurrent = mode()
@@ -202,6 +184,40 @@ function! ModeCurrent() abort
     let l:current_status_mode = l:modelist
     return l:current_status_mode
 endfunction
+
+" StatusbaAar
+set laststatus=2
+set statusline=
+set statusline+=\%#TermCursor#
+set statusline+=\ %{ModeCurrent()}
+set statusline+=\ %#FoldColumn#
+set statusline+=\ %{WebDevIconsGetFileTypeSymbol()}
+set statusline+=\ %f
+set statusline+=\ %#StatusLineNC#
+set statusline+=\ %{LinterStatus()} 
+set statusline+=\ %M
+set statusline+=\ %#VertSplit#
+set statusline+=%=
+set statusline+=\ %#TermCursor#
+set statusline+=\ %l:%L
+set statusline+=\ ⵂ
+set statusline+=\ %P
+set statusline+=\ 
+
+"let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols = {} " needed
+silent! let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['r'] = 'ﳒ'
+silent! let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['csv'] = ''
+silent! let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['json'] = 'ﬥ'
+silent! let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['zip'] = ''
+silent! let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['rar'] = ''
+silent! let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['tar'] = ''
+silent! let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['erb'] = ''
+silent! let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['js'] = ''
+silent! let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['ipynb'] = ''
+
+let g:WebDevIconsUnicodeDecorateFolderNodes = 1
+"let g:WebDevIconsNerdTreeAfterGlyphPadding = ''
+
 
 " UltiSnips
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -286,7 +302,7 @@ function! LinterStatus() abort
     let l:all_errors = l:counts.error + l:counts.style_error
     let l:all_non_errors = l:counts.total - l:all_errors
 
-    return l:counts.total == 0 ? 'ok' : printf('⚠  %d   ⃠ %d', all_non_errors, all_errors )
+    return l:counts.total == 0 ? 'ok' : printf(' %d  %d', all_non_errors, all_errors )
 endfunction
 
 """ Markdown + TeX {{{
@@ -309,12 +325,16 @@ endfunction
 """ }}}
 
 " Ale settings {{{
-    highlight clear ALEErrorSign
-    highlight clear ALEWarningSign
-    let g:ale_sign_error = "·"
-    let g:ale_sign_warning = '·'
+    let g:ale_sign_error = ""
+    let g:ale_sign_warning = ''
     let g:ale_emit_conflict_warnings = 0
     let g:ale_lint_delay = 600
+    let g:ale_set_highlights = 0
+    let b:ale_warn_about_trailing_whitespace = 0
+    highlight! clear ALEErrorSign
+    highlight! clear ALEWarningSign
+    "hi link ALEErrorSign ctermfg=9 ctermbg=15 guifg=#C30500 guibg=#F5F5F5
+    "hi link ALEWarningSign ctermfg=11 ctermbg=15 guifg=#ED6237 guibg=#F5F5F5
 " }}}
 
 
@@ -397,9 +417,22 @@ augroup configgroup
     autocmd BufEnter,BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
 augroup END
 
+
+"function s:updateCursorLine()
+    "if %background == "dark"
+        "highlight CursorLineNr guifg=green guibg=NONE gui=NONE
+    "else
+        "highlight CursorLineNr guifg=red guibg=NONE gui=NONE
+    "endif
+"endf
+
+if exists('g:loaded_webdevicons')
+    call webdevicons#refresh()
+endif
+
+"autocmd ColorScheme * call s:updateCursorLine()
 autocmd BufEnter * call ncm2#enable_for_buffer()
 set completeopt=noinsert,menuone,noselect
 set shortmess+=c
 
-
-
+set tags=tags;

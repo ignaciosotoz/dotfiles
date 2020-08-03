@@ -1,12 +1,12 @@
-# tmux-statusbar
+#tmux-statusbar
 set -g default-terminal "screen-256color"
-set -g status-bg colour8
+set -g status-bg colour0
 set -g status-justify left
 set -g status-left-length 150
 set -g status-right-length 150
-set -g status-left "#[bg=colour8,fg=colour0]#{?client_prefix,#[bg=colour0]#[fg=colour8] , }[#S]#{?client_prefix,#[fg=colour16] , }#{?window_zoomed_flag,▣ , }⎇ #(cd #{pane_current_path}; git rev-parse --abbrev-ref HEAD) #[bg=colour02,fg=colour0] #(cd #{pane_current_path}; git status -s | egrep -c 'M')↯ #[bg=colour01,fg=colour0] #(cd #{pane_current_path}; git  status -s | egrep -c 'D')⊗ #[bg=colour04,fg=colour0] #(cd #{pane_current_path}; git status -s | grep -c '\?\?')✧ "
-##( cd #{pane_current_path};status=$( git rev-list --left-right --count HEAD...@'{u}'); echo $status[2])'⇡' #(cd #{pane_current_path}; status=$(git rev-list --left-right --count HEAD...@'{u}'); echo $status[1] )
-set -g status-right "#[fg=colour0, bg=colour8] #{spotify_artist} - #{spotify_track} | %H%M%S |#{battery_status_fg} #{battery_percentage} "
-set -g window-status-format "#[fg=colour0] #I #W #[fg=colour0]"
-setw -g window-status-current-attr bold
-setw -g window-status-current-format "#[bg=colour0] #[fg=colour16]#[bg=colour0]#I #[fg=colour8]#W "
+set -g status-left "#{?client_prefix,#[fg=colour0]#[bg=colour3] ,#[bg=colour0]#[fg=colour3]#[bold] }#{?window_zoomed_flag,\uFB13 ,\uFB3F } #S  "
+#set -g status-right "#[fg=colour0, fg=colour6] \uf9c2#[fg=colour0, bg=colour6] #{spotify_artist} - #{spotify_track} #[fg=colour0,bg=colour0]|#[bg=colour0, fg=colour4] \uf64f #[fg=colour0, bg=colour4] %H:%M:%S #[fg=colour0,bg=colour0]|#[bg=colour0, fg=colour5] \ufb77 #[fg=colour0, bg=colour5] %Y%m%d #[bg=colour0,fg=colour0]|#[fg=colour8, bg=colour0] \uF58a #[bg=colour8, fg=colour0] #{battery_percentage} #[fg=colour0,bg=colour0] "
+set -g status-right "#[fg=colour0, fg=colour6] #[fg=colour0, bg=colour6] #{spotify_artist} - #{spotify_track} #[fg=colour0,bg=colour0]|#[bg=colour0, fg=colour4] #[fg=colour0, bg=colour4] %H:%M:%S #[fg=colour0,bg=colour0]|#[bg=colour0, fg=colour5] #[fg=colour0, bg=colour5] %Y%m%d #[bg=colour0,fg=colour0]|#[fg=colour8, bg=colour0] #[bg=colour8, fg=colour0] #{battery_percentage} #[fg=colour0,bg=colour0] "
+set -g window-status-format "#[bg=colour8,fg=colour0] #I #[bg=colour0,fg=colour8] #W #[fg=colour8]"
+set -g window-status-separator "#[bg=colour0,fg=colour0]|"
+setw -g window-status-current-format "#[bg=colour3,fg=colour0] #I #[bg=colour0,fg=colour8,bold] #W #[fg=colour3] "
